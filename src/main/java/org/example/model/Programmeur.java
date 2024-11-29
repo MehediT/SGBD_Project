@@ -10,7 +10,7 @@ public class Programmeur {
     private String responsable;
     private String hobby;
 
-    private int annNaissance;
+    private int anNaissance;
     private int salaire;
     private int prime;
 
@@ -22,14 +22,16 @@ public class Programmeur {
         this.pseudo = pseudo;
         this.responsable = responsable;
         this.hobby = hobby;
-        this.annNaissance = annNaissance;
+        this.anNaissance = annNaissance;
         this.salaire = salaire;
         this.prime = prime;
     }
     public Programmeur(String nom, String prenom, String adresse, String pseudo, String responsable, String hobby, int annNaissance, int salaire, int prime) {
         this(0, nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime);
     }
-
+    public Programmeur(){
+        this(0, "", "", "", "", "", "", 0, 0, 0);
+    }
     public int getId() {
         return id;
     }
@@ -86,12 +88,12 @@ public class Programmeur {
         this.hobby = hobby;
     }
 
-    public int getAnnNaissance() {
-        return annNaissance;
+    public int getAnNaissance() {
+        return anNaissance;
     }
 
-    public void setAnnNaissance(int annNaissance) {
-        this.annNaissance = annNaissance;
+    public void setAnNaissance(int anNaissance) {
+        this.anNaissance = anNaissance;
     }
 
     public int getSalaire() {
@@ -119,7 +121,7 @@ public class Programmeur {
                 "\nPseudo\t\t\t: " + pseudo +
                 "\nResponsable\t\t: " + responsable +
                 "\nHobby\t\t\t: " + hobby +
-                "\nNaissance\t\t: " + annNaissance +
+                "\nNaissance\t\t: " + anNaissance +
                 "\nSalaire\t\t\t: " + salaire +
                 "\nPrime\t\t\t: " + prime +
                 "\n---------------------------"

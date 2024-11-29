@@ -1,5 +1,7 @@
 package org.example.service;
 
+import org.example.exception.SQLConnectionException;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -13,8 +15,8 @@ public class DbService {
             connection = DriverManager.getConnection(URL);
             System.out.println("Connexion réussie à PostgreSQL !");
         } catch (SQLException e) {
-            e.printStackTrace();
-            throw new RuntimeException("Échec de la connexion à PostgreSQL.");
+//            e.printStackTrace();
+            throw new SQLConnectionException("Échec de la connexion à PostgreSQL.");
         }  
         return connection;
     }

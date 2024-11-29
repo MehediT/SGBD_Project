@@ -1,5 +1,9 @@
 package org.example.ui;
 
+import org.example.exception.SQLConnectionException;
+import org.example.exception.SQLFailAdd;
+import org.example.exception.SQLFailDelete;
+import org.example.exception.SQLFailQuery;
 import org.example.model.Programmeur;
 import org.example.service.IProgrammeurService;
 
@@ -18,28 +22,34 @@ public class StartMenu {
         int choix;
         do {
             afficherMenu();
-            choix = saisirChoix();
-            switch (choix) {
-                case 1:
-                    showProgrammers();
-                    break;
-                case 2:
-                    showProgrammer();
-                    break;
-                case 3:
-                    removeProgrammer();
-                    break;
-                case 4:
-                    addProgrammer();
-                    break;
-                case 5:
-                    updateSalaire();
-                    break;
-                case 6:
-                    System.out.println("Quitter le programme");
-                    break;
-                default:
-                    System.out.println("Choix invalide");
+            choix = getByScannerInt();
+            try {
+                switch (choix) {
+                    case 1:
+                        showProgrammers();
+                        break;
+                    case 2:
+                        showProgrammer();
+                        break;
+                    case 3:
+                        removeProgrammer();
+                        break;
+                    case 4:
+                        addProgrammer();
+                        break;
+                    case 5:
+                        updateSalaire();
+                        break;
+                    case 6:
+                        System.out.println("Quitter le programme");
+                        break;
+                    default:
+                        System.out.println("Choix invalide");
+                }
+            } catch (SQLFailAdd | SQLFailQuery | SQLFailDelete | SQLConnectionException e) {
+                System.err.println(e.getMessage());
+            } catch (Exception e) {
+                System.err.println("Erreur inconnue : " + e.getMessage());
             }
         } while (choix != 6);
     }
@@ -54,48 +64,37 @@ public class StartMenu {
             System.out.print("Nouveau salaire : ");
             int salaire = scanner.nextInt();
             p.setSalaire(salaire);
-            p = programmeurService.update(id, p);
-            if (p == null){
-                System.out.println("Échec de la mise à jour du salaire.");
-            }else {
-                System.out.println("Programmeur supprimé avec succès.");
-            }
+            programmeurService.update(p);
         }
     }
+
     private void showProgrammer() {
         System.out.print("Entrez l'ID du programmeur : ");
         int id = scanner.nextInt();
         Programmeur p = programmeurService.findOne(id);
-        if (p == null){
-            System.out.println("Programmeur non trouvé.");
-        }else {
-            System.out.println(p);
-        }
+        System.out.println(p);
     }
 
     private void addProgrammer() {
+        Programmeur programmeur = new Programmeur();
         System.out.print("Nom : ");
-        String nom = scanner.next();
+        programmeur.setNom(scanner.next());
         System.out.print("Prénom : ");
-        String prenom = scanner.next();
-        System.out.print("Prénom : ");
-        String adresse = scanner.next();
+        programmeur.setPrenom(scanner.next());
         System.out.print("Pseudo : ");
-        String pseudo = scanner.next();
+        programmeur.setPseudo(scanner.next());
         System.out.print("Responsable : ");
-        String responsable = scanner.next();
+        programmeur.setResponsable(scanner.next());
         System.out.print("Hobby : ");
-        String hobby = scanner.next();
+        programmeur.setHobby(scanner.next());
         System.out.print("Année de naissance : ");
-        int anNaissance = scanner.nextInt();
+        programmeur.setAnNaissance(getByScannerInt());
         System.out.print("Salaire : ");
-        int salaire = scanner.nextInt();
+        programmeur.setSalaire(getByScannerInt());
         System.out.print("Prime : ");
-        int prime = scanner.nextInt();
+        programmeur.setPrime(getByScannerInt());
 
-        Programmeur p = new Programmeur(0, nom, prenom, adresse, pseudo, responsable, hobby, anNaissance, salaire, prime);
-
-        System.out.println(programmeurService.add(p) != null ? "Programmeur ajouté avec succès." : "Échec de l'ajout.");
+        programmeurService.add(programmeur);
     }
 
     private void showProgrammers() {
@@ -109,12 +108,12 @@ public class StartMenu {
         if (p == null){
             System.out.println("Programmeur non trouvé.");
         }else {
-            programmeurService.delete(id);
+            programmeurService.delete(p);
             System.out.println("Programmeur supprimé avec succès.");
         }
     }
 
-    private int saisirChoix() {
+    private int getByScannerInt() {
         System.out.println("Quel est votre choix ? : ");
         if (scanner.hasNextInt()) {
             return scanner.nextInt();
@@ -122,7 +121,7 @@ public class StartMenu {
         return 0;
     }
 
-    public void afficherMenu() {
+    public static void afficherMenu() {
         System.out.println("<<<<<<<<<< Menu >>>>>>>>>>");
         System.out.println("1. Afficher la liste des programmeurs\n");
         System.out.println("2. Afficher un programmeur\n");
