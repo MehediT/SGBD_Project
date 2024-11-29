@@ -106,4 +106,6 @@ public class Programmeur {
     public void setPrime(int prime) {
         this.prime = prime;
     }
+
+
 }
