@@ -26,6 +26,9 @@ public class Programmeur {
         this.salaire = salaire;
         this.prime = prime;
     }
+    public Programmeur(String nom, String prenom, String adresse, String pseudo, String responsable, String hobby, int annNaissance, int salaire, int prime) {
+        this(0, nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime);
+    }
 
     public int getId() {
         return id;
@@ -109,17 +112,17 @@ public class Programmeur {
 
     @Override
     public String toString() {
-        return  "Id\t\t\t:" + id +
-                "Nom\t\t\t:" + nom +
-                "Prenom\t\t\t:" + prenom +
-                "Adresse\t\t\t:" + adresse +
-                "Pseudo\t\t\t:" + pseudo +
-                "Responsable\t\t\t:" + responsable +
-                "Hobby\t\t\t:" + hobby +
-                "Naissance\t\t\t:" + annNaissance +
-                "Salaire\t\t\t:" + salaire +
-                "Prime\t\t\t:" + prime +
-                "---------------------------"
+        return  "Id\t\t\t\t: " + id +
+                "\nNom\t\t\t\t: " + nom +
+                "\nPrenom\t\t\t: " + prenom +
+                "\nAdresse\t\t\t: " + adresse +
+                "\nPseudo\t\t\t: " + pseudo +
+                "\nResponsable\t\t: " + responsable +
+                "\nHobby\t\t\t: " + hobby +
+                "\nNaissance\t\t: " + annNaissance +
+                "\nSalaire\t\t\t: " + salaire +
+                "\nPrime\t\t\t: " + prime +
+                "\n---------------------------"
                 ;
     }
 }

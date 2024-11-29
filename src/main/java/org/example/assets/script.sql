@@ -1,6 +1,6 @@
-CREATE DATABASE sgbdproject;
+-- CREATE DATABASE sgbdproject;
 
-\c sgbdproject;
+-- \c sgbdproject;
 
 CREATE TABLE programmeur (
      id SERIAL PRIMARY KEY,       -- ID unique auto-incrémenté

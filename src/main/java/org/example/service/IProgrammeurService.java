@@ -12,10 +12,10 @@ public interface IProgrammeurService {
     Programmeur findOne(int id);
 
     // Méthode pour ajouter un nouveau programmeur
-    void add(Programmeur programmeur);
+    Programmeur add(Programmeur programmeur);
 
     // Méthode pour mettre à jour un programmeur
-    void update(int id, Programmeur updatedProgrammeur);
+    Programmeur update(int id, Programmeur updatedProgrammeur);
 
     // Méthode pour supprimer un programmeur
     void delete(int id);

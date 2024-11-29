@@ -69,7 +69,7 @@ public class ProgrammeurService implements IProgrammeurService {
     }
 
     @Override
-    public void add(Programmeur programmeur) {
+    public Programmeur add(Programmeur programmeur) {
         String sql = "INSERT INTO programmeurs (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DbService.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -84,14 +84,15 @@ public class ProgrammeurService implements IProgrammeurService {
             pstmt.setInt(8, programmeur.getSalaire());
             pstmt.setInt(9, programmeur.getPrime());
 
-            pstmt.executeUpdate();
+            return pstmt.executeUpdate()==1 ? programmeur : null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Override
-    public void update(int id, Programmeur updatedProgrammeur) {
+    public Programmeur update(int id, Programmeur updatedProgrammeur) {
         String sql = "UPDATE programmeurs SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
         try (Connection conn = DbService.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
@@ -107,10 +108,13 @@ public class ProgrammeurService implements IProgrammeurService {
             pstmt.setInt(9, updatedProgrammeur.getPrime());
             pstmt.setInt(10, id);
 
-            pstmt.executeUpdate();
+
+
+            return pstmt.executeUpdate()==1 ? updatedProgrammeur : null;
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
 
     @Override
