@@ -9,26 +9,22 @@ public class DbService {
     private static Connection connection;
 
     public static Connection getConnection() {
-        if (connection == null) {
-            try {
-                connection = DriverManager.getConnection(URL);
-                System.out.println("Connexion réussie à PostgreSQL !");
-            } catch (SQLException e) {
-                e.printStackTrace();
-                throw new RuntimeException("Échec de la connexion à PostgreSQL.");
-            }
-        }
+        try {
+            connection = DriverManager.getConnection(URL);
+            System.out.println("Connexion réussie à PostgreSQL !");
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Échec de la connexion à PostgreSQL.");
+        }  
         return connection;
     }
 
     public static void closeConnection() {
-        if (connection != null) {
-            try {
-                connection.close();
-                System.out.println("Connexion fermée.");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+        try {
+            connection.close();
+            System.out.println("Connexion fermée.");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }
