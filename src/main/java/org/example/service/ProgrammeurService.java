@@ -42,7 +42,7 @@ public class ProgrammeurService implements IProgrammeurService {
 
     @Override
     public Programmeur findOne(int id) {
-        String sql = "SELECT * FROM programmeurs WHERE id = ?";
+        String sql = "SELECT * FROM programmeur WHERE id = ?";
         try (Connection conn = DbService.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -70,7 +70,7 @@ public class ProgrammeurService implements IProgrammeurService {
 
     @Override
     public Programmeur add(Programmeur programmeur) {
-        String sql = "INSERT INTO programmeurs (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO programmeur (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DbService.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -93,7 +93,7 @@ public class ProgrammeurService implements IProgrammeurService {
 
     @Override
     public Programmeur update(int id, Programmeur updatedProgrammeur) {
-        String sql = "UPDATE programmeurs SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
+        String sql = "UPDATE programmeur SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
         try (Connection conn = DbService.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
@@ -119,7 +119,7 @@ public class ProgrammeurService implements IProgrammeurService {
 
     @Override
     public void delete(int id) {
-        String sql = "DELETE FROM programmeurs WHERE id = ?";
+        String sql = "DELETE FROM programmeur WHERE id = ?";
         try (Connection conn = DbService.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
 
