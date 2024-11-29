@@ -107,5 +107,19 @@ public class Programmeur {
         this.prime = prime;
     }
 
-
+    @Override
+    public String toString() {
+        return  "Id\t\t\t:" + id +
+                "Nom\t\t\t:" + nom +
+                "Prenom\t\t\t:" + prenom +
+                "Adresse\t\t\t:" + adresse +
+                "Pseudo\t\t\t:" + pseudo +
+                "Responsable\t\t\t:" + responsable +
+                "Hobby\t\t\t:" + hobby +
+                "Naissance\t\t\t:" + annNaissance +
+                "Salaire\t\t\t:" + salaire +
+                "Prime\t\t\t:" + prime +
+                "---------------------------"
+                ;
+    }
 }
