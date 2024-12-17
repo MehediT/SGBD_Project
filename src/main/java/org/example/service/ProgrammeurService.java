@@ -11,8 +11,20 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Service permettant d'interagir avec la base de données pour effectuer des opérations CRUD sur les programmeurs.
+ * Cette classe implémente l'interface {@link IProgrammeurService} et fournit des méthodes pour ajouter, mettre à jour,
+ * supprimer et récupérer des programmeurs dans la base de données.
+ */
 public class ProgrammeurService implements IProgrammeurService {
 
+    /**
+     * Récupère tous les programmeurs présents dans la base de données.
+     *
+     * @return Une liste de programmeurs récupérés de la base de données.
+     * @throws SQLFailQuery En cas d'erreur lors de la récupération des programmeurs.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
     @Override
     public List<Programmeur> findAll() throws SQLFailQuery, SQLConnectionException {
         List<Programmeur> programmeurs = new ArrayList<>();
@@ -37,7 +49,6 @@ public class ProgrammeurService implements IProgrammeurService {
                 programmeurs.add(user);
             }
         } catch (SQLException e) {
-//            e.printStackTrace();
             throw new SQLFailQuery("Erreur lors de la récupération des programmeurs.\n" + e.getMessage());
         } finally {
             DbService.closeConnection();
@@ -45,6 +56,14 @@ public class ProgrammeurService implements IProgrammeurService {
         return programmeurs;
     }
 
+    /**
+     * Récupère un programmeur spécifique par son identifiant (ID).
+     *
+     * @param id L'identifiant du programmeur à récupérer.
+     * @return Le programmeur correspondant à l'ID, ou null si aucun programmeur n'est trouvé.
+     * @throws SQLFailQuery En cas d'erreur lors de la récupération du programmeur.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
     @Override
     public Programmeur findOne(int id) throws SQLFailQuery, SQLConnectionException {
         String sql = "SELECT * FROM programmeur WHERE id = ?";
@@ -74,45 +93,62 @@ public class ProgrammeurService implements IProgrammeurService {
         return null;
     }
 
+    /**
+     * Ajoute un nouveau programmeur à la base de données.
+     *
+     * @param p Le programmeur à ajouter.
+     * @throws SQLFailAdd En cas d'erreur lors de l'ajout du programmeur.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
     @Override
     public void add(Programmeur p) throws SQLFailAdd, SQLConnectionException {
         String sql = "INSERT INTO programmeur (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            setStringStatement(p, stmt);
+            stmt.setString(1, p.getNom());
+            stmt.setString(2, p.getPrenom());
+            stmt.setString(3, p.getAdresse());
+            stmt.setString(4, p.getPseudo());
+            stmt.setString(5, p.getResponsable());
+            stmt.setString(6, p.getHobby());
+            stmt.setInt(7, p.getAnNaissance());
+            stmt.setInt(8, p.getSalaire());
+            stmt.setInt(9, p.getPrime());
             stmt.executeUpdate();
         } catch (SQLException e) {
-            throw new SQLFailAdd("Erreur lors de l'ajout du programmeur : "
-                    + p.getId() + "\n"
-                    + p.getNom() + "\n"
-                    + p.getPrenom() + "\n"
-                    + e.getMessage()
-            );
-        }finally {
+            throw new SQLFailAdd("Erreur lors de l'ajout du programmeur : " + e.getMessage());
+        } finally {
             DbService.closeConnection();
         }
-
     }
 
+    /**
+     * Met à jour un programmeur existant dans la base de données.
+     *
+     * @param updatedProgrammeur Le programmeur avec les nouvelles données à mettre à jour.
+     * @throws SQLFailUpdate En cas d'erreur lors de la mise à jour du programmeur.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
     @Override
     public void update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException {
         String sql = "UPDATE programmeur SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
         try (Connection conn = DbService.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-
             setStringStatement(updatedProgrammeur, pstmt);
-            pstmt.setInt(1, updatedProgrammeur.getId());
-
-            DbService.closeConnection();
+            pstmt.setInt(10, updatedProgrammeur.getId());
+            pstmt.executeUpdate();
         } catch (SQLException e) {
-//            e.printStackTrace();
-            throw new SQLFailUpdate("Erreur lors de la mise à jour du programmeur : "
-                    + updatedProgrammeur.getId() + "\n"
-                    + updatedProgrammeur.getNom() + "\n"
-                    + updatedProgrammeur.getPrenom() + "\n"
-                    + e.getMessage()
-            );
+            throw new SQLFailUpdate("Erreur lors de la mise à jour du programmeur : " + e.getMessage());
+        } finally {
+            DbService.closeConnection();
         }
     }
 
+    /**
+     * Supprime un programmeur de la base de données.
+     *
+     * @param p Le programmeur à supprimé.
+     * @throws SQLFailDelete En cas d'erreur lors de la suppression du programmeur.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
     @Override
     public void delete(Programmeur p) throws SQLFailDelete, SQLConnectionException {
         String sql = "DELETE FROM programmeur WHERE id = ?";
@@ -121,18 +157,19 @@ public class ProgrammeurService implements IProgrammeurService {
             pstmt.setInt(1, p.getId());
             pstmt.executeUpdate();
         } catch (SQLException e) {
-//            e.printStackTrace();
-            throw new SQLFailDelete("Erreur lors de la suppression du programmeur : "
-                    + p.getId() + "\n"
-                    + p.getNom() + "\n"
-                    + p.getPrenom() + "\n"
-                    + e.getMessage()
-            );
+            throw new SQLFailDelete("Erreur lors de la suppression du programmeur : " + e.getMessage());
         } finally {
             DbService.closeConnection();
         }
     }
 
+    /**
+     * Remplie un {@link PreparedStatement} avec les informations d'un programmeur pour une mise à jour.
+     *
+     * @param updatedProgrammeur Le programmeur avec les nouvelles données.
+     * @param stmt Le {@link PreparedStatement} à remplir.
+     * @throws SQLException Si une erreur se produit lors du remplissage du statement.
+     */
     private void setStringStatement(Programmeur updatedProgrammeur, PreparedStatement stmt) throws SQLException {
         stmt.setInt(1, updatedProgrammeur.getId());
         stmt.setString(2, updatedProgrammeur.getNom());

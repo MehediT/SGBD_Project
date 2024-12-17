@@ -1,147 +1,106 @@
 package org.example.run;
 
-import org.example.exception.SQLConnectionException;
-import org.example.exception.SQLFailAdd;
-import org.example.exception.SQLFailDelete;
-import org.example.exception.SQLFailQuery;
 import org.example.model.Programmeur;
 import org.example.service.IProgrammeurService;
 
 import java.util.Scanner;
 
-public class StartMenu {
+/**
+ * Classe représentant le menu principal de l'application, permettant à l'utilisateur d'interagir avec
+ * les données des programmeurs (ajouter, supprimer, afficher, mettre à jour).
+ * <p>
+ * Cette classe offre un menu interactif dans le terminal, permettant de réaliser différentes actions
+ * concernant les programmeurs, telles que l'ajout, la suppression ou la modification du salaire.
+ * </p>
+ */
+public class StartMenu extends StartProgram {
 
-    private final IProgrammeurService programmeurService;
-    private Scanner scanner;
-
-    public StartMenu(IProgrammeurService actionsBDD) {
-        this.programmeurService = actionsBDD;
-        this.scanner = new Scanner(System.in);
-    }
-    public StartMenu(IProgrammeurService actionsBDD, Scanner scanner) {
-        this.programmeurService = actionsBDD;
-        this.scanner = scanner;
-    }
-
-    public void run(){
-        int choix;
-        do {
-            afficherMenu();
-            choix = getByScannerInt();
-            try {
-                switch (choix) {
-                    case 1:
-                        showProgrammers();
-                        break;
-                    case 2:
-                        showProgrammer();
-                        break;
-                    case 3:
-                        removeProgrammer();
-                        break;
-                    case 4:
-                        addProgrammer();
-                        break;
-                    case 5:
-                        updateSalaire();
-                        break;
-                    case 6:
-                        System.out.println("Quitter le programme");
-                        break;
-                    default:
-                        System.out.println("Choix invalide");
-                }
-            } catch (SQLFailAdd | SQLFailQuery | SQLFailDelete | SQLConnectionException e) {
-                System.err.println(e.getMessage());
-            } catch (Exception e) {
-                System.err.println("Erreur inconnue : " + e.getMessage());
-            }
-        } while (choix != 6);
+    /**
+     * Constructeur principal pour initialiser le menu avec le service de programmeurs et le scanner.
+     *
+     * @param programmeurService Le service permettant d'effectuer des actions sur les programmeurs dans la base de données.
+     */
+    public StartMenu(IProgrammeurService programmeurService, Scanner scanner) {
+        super(programmeurService, scanner);
     }
 
-    private void updateSalaire() {
-        System.out.print("Entrez l'ID du programmeur : ");
-        int id = scanner.nextInt();
+    /**
+     * Méthode permettant de modifier le salaire d'un programmeur en spécifiant son ID.
+     */
+    
+    protected void updateSalaire() {
+        System.out.println("<<<<<<<<<< Modification du salaire >>>>>>>>>>\n");
+        int id = super.getByScannerInt("Entrez l'ID du programmeur : ");
         Programmeur p = programmeurService.findOne(id);
-        if (p == null){
+        if (p == null) {
             System.out.println("Programmeur non trouvé.");
-        }else {
-            System.out.print("Nouveau salaire : ");
-            int salaire = scanner.nextInt();
+        } else {
+            int salaire = super.getByScannerInt("Nouveau salaire : ");
             p.setSalaire(salaire);
             programmeurService.update(p);
         }
     }
 
-    private void showProgrammer() {
-        System.out.print("Entrez l'ID du programmeur : ");
-        int id = scanner.nextInt();
+    /**
+     * Méthode permettant d'afficher les détails d'un programmeur spécifique en fonction de son ID.
+     */
+    protected void showProgrammer() {
+        System.out.println("<<<<<<<<<< Affichage d'un programmeur >>>>>>>>>>\n");
+        int id = super.getByScannerInt("Entrez l'ID du programmeur : ");
         Programmeur p = programmeurService.findOne(id);
         System.out.println(p);
     }
 
-    private void addProgrammer() {
+    /**
+     * Méthode permettant d'ajouter un nouveau programmeur en entrant les informations nécessaires.
+     */
+    protected void addProgrammer() {
+        System.out.println("<<<<<<<<<< Ajout d'un programmeur >>>>>>>>>>\n");
         Programmeur programmeur = new Programmeur();
         System.out.print("Nom : ");
         programmeur.setNom(scanner.next());
         System.out.print("Prénom : ");
         programmeur.setPrenom(scanner.next());
+        System.out.print("Adresse : ");
+        programmeur.setAdresse(scanner.next());
         System.out.print("Pseudo : ");
         programmeur.setPseudo(scanner.next());
         System.out.print("Responsable : ");
         programmeur.setResponsable(scanner.next());
         System.out.print("Hobby : ");
         programmeur.setHobby(scanner.next());
-        System.out.print("Année de naissance : ");
-        programmeur.setAnNaissance(getByScannerInt());
-        System.out.print("Salaire : ");
-        programmeur.setSalaire(getByScannerInt());
-        System.out.print("Prime : ");
-        programmeur.setPrime(getByScannerInt());
+
+        programmeur.setAnNaissance(super.getByScannerInt("Année de naissance : "));
+        programmeur.setSalaire(super.getByScannerInt("Salaire : "));
+        programmeur.setPrime(super.getByScannerInt("Prime : "));
 
         programmeurService.add(programmeur);
     }
 
-    private void showProgrammers() {
+    /**
+     * Méthode permettant d'afficher tous les programmeurs.
+     */
+    protected void showProgrammers() {
+        System.out.println("<<<<<<<<<< Affichage de la liste des programmeurs >>>>>>>>>>\n");
         programmeurService.findAll().forEach(System.out::println);
     }
 
-    private void removeProgrammer() {
+    /**
+     * Méthode permettant de supprimer un programmeur en fonction de son ID.
+     */
+    protected void removeProgrammer() {
+        System.out.println("<<<<<<<<<< Suppression d'un programmeur >>>>>>>>>>\n");
         System.out.print("Entrez l'ID du programmeur : ");
         int id = scanner.nextInt();
         Programmeur p = programmeurService.findOne(id);
-        if (p == null){
+        if (p == null) {
             System.out.println("Programmeur non trouvé.");
-        }else {
+        } else {
             programmeurService.delete(p);
             System.out.println("Programmeur supprimé avec succès.");
         }
     }
 
-    private int getByScannerInt() {
-        System.out.println("Quel est votre choix ? : ");
-        if (scanner.hasNextInt()) {
-            return scanner.nextInt();
-        }
-        return 0;
-    }
 
-    public static void afficherMenu() {
-        System.out.println("<<<<<<<<<< Menu >>>>>>>>>>");
-        System.out.println("1. Afficher la liste des programmeurs\n");
-        System.out.println("2. Afficher un programmeur\n");
-        System.out.println("3. Supprimer un programmeur\n");
-        System.out.println("4. Ajouter un programmeur\n");
-        System.out.println("5. Modifier le salaire\n");
-        System.out.println("6. Quitter le programme\n");
-    }
-
-
-    public Scanner getScanner() {
-        return scanner;
-    }
-
-    public void setScanner(Scanner scanner) {
-        this.scanner = scanner;
-    }
+    
 }

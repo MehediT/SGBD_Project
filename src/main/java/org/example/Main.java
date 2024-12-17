@@ -8,9 +8,12 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         System.out.printf("SGBD Project\nAuthor: %s, %s\n", "Adil Chetouani", "Mehédi Touré");
-        ProgrammeurService programmeurService = new ProgrammeurService();
-        // System.out.println(programmeurService.findAll());
-        StartMenu startMenu = new StartMenu(programmeurService);
+
+        StartMenu startMenu = new StartMenu(new ProgrammeurService(), new Scanner(System.in));
         startMenu.run();
+
+        // Pour tester le menu decommente les lignes suivantes
+        // StartMenu startMenuTest = new StartTest();
+        // startMenuTest.run();
     }
 }
