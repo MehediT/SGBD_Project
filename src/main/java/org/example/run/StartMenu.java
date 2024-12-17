@@ -1,4 +1,4 @@
-package org.example.ui;
+package org.example.run;
 
 import org.example.exception.SQLConnectionException;
 import org.example.exception.SQLFailAdd;
@@ -12,10 +12,15 @@ import java.util.Scanner;
 public class StartMenu {
 
     private final IProgrammeurService programmeurService;
-    private final Scanner scanner = new Scanner(System.in);
+    private Scanner scanner;
 
     public StartMenu(IProgrammeurService actionsBDD) {
         this.programmeurService = actionsBDD;
+        this.scanner = new Scanner(System.in);
+    }
+    public StartMenu(IProgrammeurService actionsBDD, Scanner scanner) {
+        this.programmeurService = actionsBDD;
+        this.scanner = scanner;
     }
 
     public void run(){
@@ -129,5 +134,14 @@ public class StartMenu {
         System.out.println("4. Ajouter un programmeur\n");
         System.out.println("5. Modifier le salaire\n");
         System.out.println("6. Quitter le programme\n");
+    }
+
+
+    public Scanner getScanner() {
+        return scanner;
+    }
+
+    public void setScanner(Scanner scanner) {
+        this.scanner = scanner;
     }
 }
