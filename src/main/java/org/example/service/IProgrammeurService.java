@@ -34,6 +34,15 @@ public interface IProgrammeurService {
      */
     Programmeur findOne(int id) throws SQLFailQuery, SQLConnectionException;
 
+    /**
+     * Récupère un programmeur spécifique par son identifiant (ID).
+     *
+     * @param pseudo Pseudo du programmeur à récupérer.
+     * @return Le programmeur correspondant au premier pseudo fourni, ou null si le programmeur n'existe pas.
+     * @throws SQLFailQuery En cas d'échec lors de l'exécution de la requête.
+     * @throws SQLConnectionException En cas de problème avec la connexion à la base de données.
+     */
+    Programmeur findByPseudo(String pseudo) throws SQLFailQuery, SQLConnectionException;
 
     /**
      * Ajoute un nouveau programmeur à la base de données.

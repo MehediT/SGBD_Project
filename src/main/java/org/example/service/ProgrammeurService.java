@@ -93,6 +93,45 @@ public class ProgrammeurService implements IProgrammeurService {
         return null;
     }
 
+
+    /**
+     * Récupère un programmeur spécifique par son pseudo.
+     *
+     * @param pseudo Pseudo du programmeur à récupérer.
+     * @return Le programmeur correspondant à l'ID, ou null si aucun programmeur n'est trouvé.
+     * @throws SQLFailQuery En cas d'erreur lors de la récupération du programmeur.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
+    @Override
+    public Programmeur findByPseudo(String pseudo) throws SQLFailQuery, SQLConnectionException {
+        String sql = "SELECT * FROM programmeur WHERE pseudo = ? LIMIT 1";
+        try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, pseudo);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Programmeur(
+                        rs.getInt("id"),
+                        rs.getString("nom"),
+                        rs.getString("prenom"),
+                        rs.getString("adresse"),
+                        rs.getString("pseudo"),
+                        rs.getString("responsable"),
+                        rs.getString("hobby"),
+                        rs.getInt("annNaissance"),
+                        rs.getInt("salaire"),
+                        rs.getInt("prime")
+                );
+            }
+        } catch (SQLException e) {
+            throw new SQLFailQuery("Erreur lors de la récupération du programmeur par pseudo.\n" + e.getMessage());
+        } finally {
+            DbService.closeConnection();
+        }
+        return null;
+    }
+
+
+
     /**
      * Ajoute un nouveau programmeur à la base de données.
      *

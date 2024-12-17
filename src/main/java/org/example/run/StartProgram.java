@@ -53,6 +53,9 @@ public abstract class StartProgram {
                     case 6:
                         System.out.println("Quitter le programme");
                         break;
+                    case 7:
+                        findByPseudo();
+                        break;
                     default:
                         System.out.println("Choix invalide");
                 }
@@ -63,6 +66,8 @@ public abstract class StartProgram {
             }
         } while (choix != 6);
     }
+
+    protected abstract void findByPseudo();
 
     protected abstract void removeProgrammer();
 
@@ -100,6 +105,10 @@ public abstract class StartProgram {
         System.out.println("4. Ajouter un programmeur\n");
         System.out.println("5. Modifier le salaire\n");
         System.out.println("6. Quitter le programme\n");
+
+        System.out.println("Bonnus");
+        System.out.println("7. Afficher un programmeur via son pseudo");
+
     }
 
 }

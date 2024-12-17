@@ -101,6 +101,15 @@ public class StartMenu extends StartProgram {
         }
     }
 
-
-    
+    protected void findByPseudo() {
+        System.out.println("<<<<<<<<<< Recherche d'un programmeur par pseudo >>>>>>>>>>\n");
+        System.out.print("Entrez le pseudo du programmeur : ");
+        String pseudo = scanner.next();
+        Programmeur p = programmeurService.findByPseudo(pseudo);
+        if (p == null) {
+            System.out.println("Programmeur non trouvé.");
+        } else {
+            System.out.println(p);
+        }
+    }
 }
