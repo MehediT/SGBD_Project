@@ -28,7 +28,7 @@ public class StartMenu extends StartProgram {
      * Méthode permettant de modifier le salaire d'un programmeur en spécifiant son ID.
      */
     
-    protected void updateSalaire() {
+     protected void updateSalaire() {
         System.out.println("<<<<<<<<<< Modification du salaire >>>>>>>>>>\n");
         int id = super.getByScannerInt("Entrez l'ID du programmeur : ");
         Programmeur p = programmeurService.findOne(id);
@@ -39,6 +39,74 @@ public class StartMenu extends StartProgram {
             p.setSalaire(salaire);
             programmeurService.update(p);
         }
+    }
+
+    /**
+     * Méthode permettant de modifier les attributs d'un programmeur en spécifiant son ID.
+     */
+    
+     protected void updateProgrammer() {
+        System.out.println("<<<<<<<<<< Modification d'un programmeur >>>>>>>>>>\n");
+        int id = super.getByScannerInt("Entrez l'ID du programmeur : ");
+        Programmeur p = programmeurService.findOne(id);
+    
+        if (p == null) {
+            System.out.println("Programmeur non trouvé.");
+            return;
+        }
+    
+        int choix;
+        do {
+            afficherSousMenuModification();
+            choix = super.getByScannerInt("Entrez votre choix : ");
+    
+            switch (choix) {
+                case 1:
+                    String nom = super.getByScannerString("Nouveau nom : ");
+                    p.setNom(nom);
+                    break;
+                case 2:
+                    String prenom = super.getByScannerString("Nouveau prénom : ");
+                    p.setPrenom(prenom);
+                    break;
+                case 3:
+                    String adresse = super.getByScannerString("Nouvelle adresse : ");
+                    p.setAdresse(adresse);
+                    break;
+                case 4:
+                    String pseudo = super.getByScannerString("Nouveau pseudo : ");
+                    p.setPseudo(pseudo);
+                    break;
+                case 5:
+                    String responsable = super.getByScannerString("Nouveau responsable : ");
+                    p.setResponsable(responsable);
+                    break;
+                case 6:
+                    String hobby = super.getByScannerString("Nouveau hobby : ");
+                    p.setHobby(hobby);
+                    break;
+                case 7:
+                    int anNaissance = super.getByScannerInt("Nouvelle année de naissance : ");
+                    p.setAnNaissance(anNaissance);
+                    break;
+                case 8:
+                    int salaire = super.getByScannerInt("Nouveau salaire : ");
+                    p.setSalaire(salaire);
+                    break;
+                case 9:
+                    int prime = super.getByScannerInt("Nouvelle prime : ");
+                    p.setPrime(prime);
+                    break;
+                case 10:
+                    System.out.println("Retour au menu principal.");
+                    break;
+                default:
+                    System.out.println("Choix invalide.");
+            }
+    
+            programmeurService.update(p); 
+    
+        } while (choix != 10);
     }
 
     /**

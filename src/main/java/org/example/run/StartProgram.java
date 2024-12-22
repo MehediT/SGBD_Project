@@ -56,6 +56,9 @@ public abstract class StartProgram {
                     case 7:
                         findByPseudo();
                         break;
+                    case 8:
+                        updateProgrammer();
+                        break;
                     default:
                         System.out.println("Choix invalide");
                 }
@@ -77,6 +80,8 @@ public abstract class StartProgram {
 
     protected abstract void updateSalaire();
 
+    protected abstract void updateProgrammer();
+
     protected abstract void showProgrammers();
 
     /**
@@ -95,6 +100,22 @@ public abstract class StartProgram {
     }
 
     /**
+     * Méthode utilitaire pour obtenir une chaîne de caractères à partir de l'entrée de l'utilisateur.
+     *
+     * @param message Le message à afficher avant de demander l'entrée utilisateur.
+     * @return La chaîne de caractères saisie par l'utilisateur.
+     */
+    public String getByScannerString(String message) {
+        System.out.println(message);
+        String input = scanner.nextLine();
+        while (input.trim().isEmpty()) {
+            System.out.println("L'entrée ne peut pas être vide. Veuillez réessayer.");
+            input = scanner.nextLine();
+        }
+        return input;
+    }
+
+    /**
      * Affiche le menu principal avec les options disponibles.
      */
     public static void afficherMenu() {
@@ -108,7 +129,21 @@ public abstract class StartProgram {
 
         System.out.println("Bonnus");
         System.out.println("7. Afficher un programmeur via son pseudo");
+        System.out.println("8. Modifier un programmeur");
+    }
 
+    public void afficherSousMenuModification() {
+        System.out.println("\n<<<<<<<<<< Sous-menu Modification >>>>>>>>>>");
+        System.out.println("1. Modifier le nom");
+        System.out.println("2. Modifier le prénom");
+        System.out.println("3. Modifier l'adresse");
+        System.out.println("4. Modifier le pseudo");
+        System.out.println("5. Modifier le responsable");
+        System.out.println("6. Modifier le hobby");
+        System.out.println("7. Modifier l'année de naissance");
+        System.out.println("8. Modifier le salaire");
+        System.out.println("9. Modifier la prime");
+        System.out.println("10. Retour au menu principal");
     }
 
 }
