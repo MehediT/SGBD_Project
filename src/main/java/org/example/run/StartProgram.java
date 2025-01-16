@@ -32,7 +32,7 @@ public abstract class StartProgram {
         int choix;
         do {
             afficherMenu();
-            choix = getByScannerInt("Entrez votre choix : ");
+            choix = getInputInt("Entrez votre choix : ");
             try {
                 switch (choix) {
                     case 1:
@@ -90,13 +90,15 @@ public abstract class StartProgram {
      * @param message Le message à afficher avant de demander l'entrée utilisateur.
      * @return L'entier saisi par l'utilisateur.
      */
-    public int getByScannerInt(String message) {
+    public int getInputInt(String message) {
         System.out.println(message);
         while (!scanner.hasNextInt()) {
             System.out.println("Veuillez entrer un nombre.");
             scanner.next();
         }
-        return scanner.nextInt();
+        int input = scanner.nextInt();
+        scanner.nextLine() ; // Pour consommer le retour à la ligne
+        return input;
     }
 
     /**
@@ -105,7 +107,7 @@ public abstract class StartProgram {
      * @param message Le message à afficher avant de demander l'entrée utilisateur.
      * @return La chaîne de caractères saisie par l'utilisateur.
      */
-    public String getByScannerString(String message) {
+    public String getInputString(String message) {
         System.out.println(message);
         String input = scanner.nextLine();
         while (input.trim().isEmpty()) {
@@ -127,7 +129,7 @@ public abstract class StartProgram {
         System.out.println("5. Modifier le salaire\n");
         System.out.println("6. Quitter le programme\n");
 
-        System.out.println("Bonnus");
+        System.out.println("Bonus");
         System.out.println("7. Afficher un programmeur via son pseudo");
         System.out.println("8. Modifier un programmeur");
     }

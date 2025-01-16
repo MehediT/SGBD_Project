@@ -171,8 +171,17 @@ public class ProgrammeurService implements IProgrammeurService {
     public void update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException {
         String sql = "UPDATE programmeur SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
         try (Connection conn = DbService.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            setStringStatement(updatedProgrammeur, pstmt);
+            pstmt.setString(1, updatedProgrammeur.getNom());
+            pstmt.setString(2, updatedProgrammeur.getPrenom());
+            pstmt.setString(3, updatedProgrammeur.getAdresse());
+            pstmt.setString(4, updatedProgrammeur.getPseudo());
+            pstmt.setString(5, updatedProgrammeur.getResponsable());
+            pstmt.setString(6, updatedProgrammeur.getHobby());
+            pstmt.setInt(7, updatedProgrammeur.getAnNaissance());
+            pstmt.setInt(8, updatedProgrammeur.getSalaire());
+            pstmt.setInt(9, updatedProgrammeur.getPrime());
             pstmt.setInt(10, updatedProgrammeur.getId());
+
             pstmt.executeUpdate();
         } catch (SQLException e) {
             throw new SQLFailUpdate("Erreur lors de la mise à jour du programmeur : " + e.getMessage());
