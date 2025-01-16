@@ -1,5 +1,6 @@
 package org.example.run;
 
+import org.example.model.Historique;
 import org.example.service.ProgrammeurService;
 
 import java.util.Scanner;
@@ -15,7 +16,7 @@ import java.util.Scanner;
 public class StartTest extends StartMenu {
 
     public StartTest() {
-        super(new ProgrammeurService(), initScanner());
+        super(new ProgrammeurService(), initScanner(), new Historique());
     }
 
     /**

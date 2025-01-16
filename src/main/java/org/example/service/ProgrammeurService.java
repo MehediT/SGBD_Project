@@ -130,6 +130,27 @@ public class ProgrammeurService implements IProgrammeurService {
         return null;
     }
 
+    @Override
+    public boolean add(Programmeur programmeur) throws SQLFailAdd, SQLConnectionException {
+        String sql = "INSERT INTO programmeur (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, programmeur.getNom());
+            stmt.setString(2, programmeur.getPrenom());
+            stmt.setString(3, programmeur.getAdresse());
+            stmt.setString(4, programmeur.getPseudo());
+            stmt.setString(5, programmeur.getResponsable());
+            stmt.setString(6, programmeur.getHobby());
+            stmt.setInt(7, programmeur.getAnNaissance());
+            stmt.setInt(8, programmeur.getSalaire());
+            stmt.setInt(9, programmeur.getPrime());
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new SQLFailAdd("Erreur lors de l'ajout du programmeur : " + e.getMessage());
+        } finally {
+            DbService.closeConnection();
+        }
+        return true;
+    }
 
 
     /**
@@ -139,27 +160,7 @@ public class ProgrammeurService implements IProgrammeurService {
      * @throws SQLFailAdd En cas d'erreur lors de l'ajout du programmeur.
      * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
      */
-    @Override
-    public boolean add(Programmeur p) throws SQLFailAdd, SQLConnectionException {
-        String sql = "INSERT INTO programmeur (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, p.getNom());
-            stmt.setString(2, p.getPrenom());
-            stmt.setString(3, p.getAdresse());
-            stmt.setString(4, p.getPseudo());
-            stmt.setString(5, p.getResponsable());
-            stmt.setString(6, p.getHobby());
-            stmt.setInt(7, p.getAnNaissance());
-            stmt.setInt(8, p.getSalaire());
-            stmt.setInt(9, p.getPrime());
-            stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new SQLFailAdd("Erreur lors de l'ajout du programmeur : " + e.getMessage());
-        } finally {
-            DbService.closeConnection();
-        }
-        return true;
-    }
+
 
     /**
      * Met à jour un programmeur existant dans la base de données.

@@ -1,24 +1,52 @@
 package org.example.model;
 
+import java.util.Objects;
+
 public class Action{
 
     private String action;
     private String date;
-    private Programmeur Programmeur;
+    private Programmeur programmeur;
 
     public Action(String action, String date, Programmeur programmeur){
         this.action = action;
         this.date = date;
+        this.programmeur = new Programmeur(
+                programmeur.getId(),
+                programmeur.getNom(),
+                programmeur.getPrenom(),
+                programmeur.getAdresse(),
+                programmeur.getPseudo(),
+                programmeur.getResponsable(),
+                programmeur.getHobby(),
+                programmeur.getAnNaissance(),
+                programmeur.getSalaire(),
+                programmeur.getPrime()
+        );
     }
+
+
     public Action(String action, String date){
         this(action,date, null);
     }
-    public String getAction(){
+    public String getActionName(){
         return action;
     }
 
-    public String getDate(){
+    public String getActionDate(){
         return date;
+    }
+
+    public String getDetails(){
+        if (programmeur == null){
+            return "";
+        }
+        String details = "Nom: " + programmeur.getNom() + " ";
+        details += "Prenom: " + programmeur.getPrenom() + " ";
+        if(!Objects.equals(programmeur.getResponsable(), "")){
+            details += "Responsable: " + programmeur.getResponsable();
+        }
+        return details;
     }
 
     public void setAction(String action){
@@ -30,14 +58,14 @@ public class Action{
     }
 
     public Programmeur getProgrammeur(){
-        return Programmeur;
+        return programmeur;
     }
 
     public void setProgrammeur(Programmeur Programmeur){
-        this.Programmeur = Programmeur;
+        this.programmeur = Programmeur;
     }
 
     public String toString(){
-        return "Action: " + action + " Date: " + date + (Programmeur != null ? "\nPour le programmeur: " + Programmeur : "");
+        return "Action: " + action + " Date: " + date + (programmeur != null ? "\nPour le programmeur: " + programmeur : "");
     }
 }

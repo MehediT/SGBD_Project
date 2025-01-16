@@ -54,7 +54,7 @@ public class StartMenu extends StartProgram {
                     currentDate,
                     p
             );
-            historique.addHistorique(action);
+            historique.ajouterAction(action);
         }
     }
 
@@ -143,7 +143,7 @@ public class StartMenu extends StartProgram {
                         currentDate,
                         p
                 );
-                historique.addHistorique(action);
+                historique.ajouterAction(action);
             }
 
         } while (choix != 10);
@@ -163,7 +163,7 @@ public class StartMenu extends StartProgram {
                 "Affichage du programmeur (ID=" + id + ")",
                 currentDate
         );
-        historique.addHistorique(action);
+        historique.ajouterAction(action);
 
         System.out.println(p);
     }
@@ -201,7 +201,7 @@ public class StartMenu extends StartProgram {
                 currentDate,
                 programmeur
         );
-        historique.addHistorique(action);
+        historique.ajouterAction(action);
     }
 
     /**
@@ -213,7 +213,7 @@ public class StartMenu extends StartProgram {
         // Optionnel : Historiser l’action (affichage global)
         String currentDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
         Action action = new Action("Affichage de tous les programmeurs", currentDate);
-        historique.addHistorique(action);
+        historique.ajouterAction(action);
 
         programmeurService.findAll().forEach(System.out::println);
     }
@@ -240,7 +240,7 @@ public class StartMenu extends StartProgram {
                     currentDate,
                     p
             );
-            historique.addHistorique(action);
+            historique.ajouterAction(action);
         }
     }
 
@@ -259,7 +259,7 @@ public class StartMenu extends StartProgram {
                 "Recherche d'un programmeur par pseudo (" + pseudo + ")",
                 currentDate
         );
-        historique.addHistorique(action);
+        historique.ajouterAction(action);
 
         if (p == null) {
             System.out.println("Programmeur non trouvé.");

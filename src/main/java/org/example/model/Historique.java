@@ -6,8 +6,12 @@ public class Historique {
 
     ArrayList<Action> historique = new ArrayList<Action>();
 
-    public void addHistorique(Action action){
+    public void ajouterAction(Action action){
         historique.add(action);
+    }
+
+    public ArrayList<Action> getHistorique() {
+        return historique;
     }
 
     public void showHistorique(){
