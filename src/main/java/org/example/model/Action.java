@@ -43,7 +43,7 @@ public class Action{
         }
         String details = "Nom: " + programmeur.getNom() + " ";
         details += "Prenom: " + programmeur.getPrenom() + " ";
-        if(!Objects.equals(programmeur.getResponsable(), "")){
+        if(programmeur.getResponsable() != 0){
             details += "Responsable: " + programmeur.getResponsable();
         }
         return details;

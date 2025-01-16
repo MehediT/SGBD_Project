@@ -100,7 +100,7 @@ public class StartMenu extends StartProgram {
                     isModified = true;
                     break;
                 case 5:
-                    String responsable = super.getInputString("Nouveau responsable : ");
+                    int responsable = super.getInputInt("Nouveau responsable : ");
                     p.setResponsable(responsable);
                     isModified = true;
                     break;
@@ -183,8 +183,19 @@ public class StartMenu extends StartProgram {
         programmeur.setAdresse(scanner.next());
         System.out.print("Pseudo : ");
         programmeur.setPseudo(scanner.next());
-        System.out.print("Responsable : ");
-        programmeur.setResponsable(scanner.next());
+        int resp = 0;
+        while (true){
+            programmeurService.findAll().forEach(programmeur1 -> System.out.println("Id : " + programmeur1.getId() + " Nom : " + programmeur1.getNom() + " Prenom : " + programmeur1.getPrenom() + " Pseudo : " + programmeur1.getPseudo()));
+            resp = super.getInputInt("Responsable Id (tapper -1 si vous ne voulez pas) : ");
+            if (resp == -1)
+                break;
+            if (programmeurService.findOne(resp) != null)
+                System.out.println("Responsable non trouvé.");
+
+        }
+
+        programmeur.setResponsable(resp);
+
         System.out.print("Hobby : ");
         programmeur.setHobby(scanner.next());
 

@@ -26,7 +26,7 @@ public class Programmeur {
     private String pseudo;
 
     /** Responsable du programmeur */
-    private String responsable;
+    private int responsable;
 
     /** Hobby ou centre d'intérêt du programmeur */
     private String hobby;
@@ -54,7 +54,7 @@ public class Programmeur {
      * @param salaire     Salaire du programmeur
      * @param prime       Prime associée
      */
-    public Programmeur(int id, String nom, String prenom, String adresse, String pseudo, String responsable, String hobby, int annNaissance, int salaire, int prime) {
+    public Programmeur(int id, String nom, String prenom, String adresse, String pseudo, int responsable, String hobby, int annNaissance, int salaire, int prime) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -80,7 +80,7 @@ public class Programmeur {
      * @param salaire     Salaire du programmeur
      * @param prime       Prime associée
      */
-    public Programmeur(String nom, String prenom, String adresse, String pseudo, String responsable, String hobby, int annNaissance, int salaire, int prime) {
+    public Programmeur(String nom, String prenom, String adresse, String pseudo, int responsable, String hobby, int annNaissance, int salaire, int prime) {
         this(0, nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime);
     }
 
@@ -88,7 +88,7 @@ public class Programmeur {
      * Constructeur par défaut initialisant les champs avec des valeurs par défaut.
      */
     public Programmeur() {
-        this(0, "", "", "", "", "", "", 0, 0, 0);
+        this(0, "", "", "", "", 0, "", 0, 0, 0);
     }
 
     /**
@@ -186,7 +186,7 @@ public class Programmeur {
      *
      * @return Le responsable
      */
-    public String getResponsable() {
+    public int getResponsable() {
         return responsable;
     }
 
@@ -195,7 +195,7 @@ public class Programmeur {
      *
      * @param responsable Le responsable à définir
      */
-    public void setResponsable(String responsable) {
+    public void setResponsable(int responsable) {
         this.responsable = responsable;
     }
 

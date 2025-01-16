@@ -8,7 +8,7 @@ CREATE TABLE programmeur (
      prenom VARCHAR(100) NOT NULL,-- Prénom du programmeur
      adresse VARCHAR(255),        -- Adresse
      pseudo VARCHAR(50) NOT NULL, -- Pseudo unique
-     responsable VARCHAR(50),     -- Nom du responsable
+     responsable INT,     -- Nom du responsable
      hobby VARCHAR(50),           -- Hobby du programmeur
      annNaissance INT,            -- Année de naissance
      salaire INT,                 -- Salaire annuel

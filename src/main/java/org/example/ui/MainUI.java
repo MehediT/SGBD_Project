@@ -8,6 +8,8 @@ import org.example.service.ProgrammeurService;
 
 import javax.swing.*;
 import java.awt.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class MainUI extends JFrame {
@@ -38,6 +40,10 @@ public class MainUI extends JFrame {
 
     private JMenuBar creerBarreDeMenu() {
         JMenuBar barreDeMenu = new JMenuBar();
+
+        JMenuItem informationsProgrammeur = new JMenuItem("Information d'un Programmeur");
+        informationsProgrammeur.addActionListener(e -> afficherInformationsProgrammeur());
+        barreDeMenu.add(informationsProgrammeur);
 
         JMenuItem ajouterProgrammeur = new JMenuItem("Ajouter un Programmeur");
         ajouterProgrammeur.addActionListener(e -> afficherDialogueAjoutProgrammeur());
@@ -118,12 +124,26 @@ public class MainUI extends JFrame {
 
     private void afficherDialogueAjoutProgrammeur() {
         JPanel panneau = new JPanel(new GridLayout(0, 2));
+
+        // Champs pour les informations du programmeur
         JTextField champNom = new JTextField();
         JTextField champPrenom = new JTextField();
         JTextField champAdresse = new JTextField();
         JTextField champPseudo = new JTextField();
+        JComboBox<String> champResponsable = new JComboBox<>();
+        JTextField champHobby = new JTextField();
+        JTextField champAnneeNaissance = new JTextField();
         JTextField champSalaire = new JTextField();
+        JTextField champPrime = new JTextField();
 
+        // Charger les responsables dans le JComboBox
+        champResponsable.addItem("Aucun"); // Option par défaut pour aucun responsable
+        List<Programmeur> listeProgrammeurs = serviceProgrammeur.findAll();
+        for (Programmeur programmeur : listeProgrammeurs) {
+            champResponsable.addItem(programmeur.getId() + " - " + programmeur.getNom() + " " + programmeur.getPrenom());
+        }
+
+        // Ajout des labels et champs au panneau
         panneau.add(new JLabel("Nom :"));
         panneau.add(champNom);
         panneau.add(new JLabel("Prénom :"));
@@ -132,55 +152,129 @@ public class MainUI extends JFrame {
         panneau.add(champAdresse);
         panneau.add(new JLabel("Pseudo :"));
         panneau.add(champPseudo);
+        panneau.add(new JLabel("Responsable :"));
+        panneau.add(champResponsable);
+        panneau.add(new JLabel("Hobby :"));
+        panneau.add(champHobby);
+        panneau.add(new JLabel("Année de Naissance :"));
+        panneau.add(champAnneeNaissance);
         panneau.add(new JLabel("Salaire :"));
         panneau.add(champSalaire);
+        panneau.add(new JLabel("Prime (optionnel) :"));
+        panneau.add(champPrime);
 
+        // Afficher la boîte de dialogue
         int resultat = JOptionPane.showConfirmDialog(this, panneau, "Ajouter un Programmeur", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
         if (resultat == JOptionPane.OK_OPTION) {
-            if (champNom.getText().isEmpty() || champPrenom.getText().isEmpty() ||
-                    champAdresse.getText().isEmpty() || champPseudo.getText().isEmpty() ||
-                    champSalaire.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Tous les champs sont requis !", "Erreur", JOptionPane.ERROR_MESSAGE);
+            // Vérification des champs obligatoires
+            if (champNom.getText().isEmpty() || champPrenom.getText().isEmpty() || champAdresse.getText().isEmpty() ||
+                    champPseudo.getText().isEmpty() || champHobby.getText().isEmpty() ||
+                    champAnneeNaissance.getText().isEmpty() || champSalaire.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Tous les champs obligatoires doivent être remplis !", "Erreur", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             try {
-                int salaire = Integer.parseInt(champSalaire.getText());
-
+                // Création et affectation des attributs du programmeur
                 Programmeur programmeur = new Programmeur();
                 programmeur.setNom(champNom.getText());
                 programmeur.setPrenom(champPrenom.getText());
                 programmeur.setAdresse(champAdresse.getText());
                 programmeur.setPseudo(champPseudo.getText());
-                programmeur.setSalaire(salaire);
 
+                // Gestion du responsable (extrait l'ID du JComboBox)
+                String responsableSelection = (String) champResponsable.getSelectedItem();
+                if (responsableSelection != null && !responsableSelection.equals("Aucun")) {
+                    String[] split = responsableSelection.split(" - ");
+                    programmeur.setResponsable(Integer.parseInt(split[0])); // ID du responsable
+                } else {
+                    programmeur.setResponsable(0); // Aucun responsable
+                }
+
+                // Champs obligatoires et optionnels
+                programmeur.setHobby(champHobby.getText());
+                programmeur.setAnNaissance(Integer.parseInt(champAnneeNaissance.getText()));
+                programmeur.setSalaire(Integer.parseInt(champSalaire.getText()));
+                programmeur.setPrime(champPrime.getText().isEmpty() ? 0 : Integer.parseInt(champPrime.getText()));
+
+                // Ajouter le programmeur via le service
                 serviceProgrammeur.add(programmeur);
-                historique.ajouterAction(new Action("Ajout Programmeur", obtenirDateActuelle(), programmeur));
+
+                // Enregistrer l'action dans l'historique
+                String dateCourante = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                Action action = new Action(
+                        "Ajout d'un nouveau programmeur ",
+                        dateCourante,
+                        programmeur
+                );
+                historique.ajouterAction(action);
+
+                // Notifications et mise à jour de l'interface
                 JOptionPane.showMessageDialog(this, "Programmeur ajouté avec succès !");
                 rafraichirListeProgrammeurs();
                 rafraichirHistorique();
             } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "Le salaire doit être un nombre valide !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(this, "Les champs Année de Naissance et Salaire doivent être des nombres valides !", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
 
     private void afficherDialogueModificationProgrammeur() {
-        String idStr = JOptionPane.showInputDialog(this, "Entrez l'ID du programmeur à modifier :");
-        if (idStr != null) {
-            try {
-                int id = Integer.parseInt(idStr);
-                Programmeur p = serviceProgrammeur.findOne(id);
+        // Panneau principal pour la sélection du programmeur
+        JPanel panneauSelection = new JPanel(new BorderLayout());
+        JComboBox<String> listeProgrammeurs = new JComboBox<>();
 
-                if (p != null) {
+        // Charger les programmeurs dans le menu déroulant
+        List<Programmeur> programmeurs = serviceProgrammeur.findAll();
+        for (Programmeur p : programmeurs) {
+            listeProgrammeurs.addItem(p.getId() + " - " + p.getNom() + " " + p.getPrenom());
+        }
+
+        panneauSelection.add(new JLabel("Choisissez le programmeur à modifier :"), BorderLayout.NORTH);
+        panneauSelection.add(listeProgrammeurs, BorderLayout.CENTER);
+
+        // Afficher le menu déroulant pour sélectionner le programmeur
+        int resultatSelection = JOptionPane.showConfirmDialog(this, panneauSelection, "Modifier un Programmeur", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (resultatSelection == JOptionPane.OK_OPTION) {
+            String programmeurSelectionne = (String) listeProgrammeurs.getSelectedItem();
+
+            if (programmeurSelectionne != null) {
+                String[] split = programmeurSelectionne.split(" - ");
+                int id = Integer.parseInt(split[0]);
+
+                Programmeur programmeur = serviceProgrammeur.findOne(id);
+
+                if (programmeur != null) {
                     JPanel panneau = new JPanel(new GridLayout(0, 2));
-                    JTextField champNom = new JTextField(p.getNom());
-                    JTextField champPrenom = new JTextField(p.getPrenom());
-                    JTextField champAdresse = new JTextField(p.getAdresse());
-                    JTextField champPseudo = new JTextField(p.getPseudo());
-                    JTextField champSalaire = new JTextField(String.valueOf(p.getSalaire()));
 
+                    // Champs pré-remplis avec les informations du programmeur
+                    JTextField champNom = new JTextField(programmeur.getNom());
+                    JTextField champPrenom = new JTextField(programmeur.getPrenom());
+                    JTextField champAdresse = new JTextField(programmeur.getAdresse());
+                    JTextField champPseudo = new JTextField(programmeur.getPseudo());
+                    JComboBox<String> champResponsable = new JComboBox<>();
+                    JTextField champHobby = new JTextField(programmeur.getHobby());
+                    JTextField champAnneeNaissance = new JTextField(String.valueOf(programmeur.getAnNaissance()));
+                    JTextField champSalaire = new JTextField(String.valueOf(programmeur.getSalaire()));
+                    JTextField champPrime = new JTextField(String.valueOf(programmeur.getPrime()));
+
+                    // Charger les responsables dans le JComboBox
+                    champResponsable.addItem("Aucun"); // Option par défaut pour aucun responsable
+                    for (Programmeur p : programmeurs) {
+                        // Empêcher le programmeur actuel d'être son propre responsable
+                        if (p.getId() != programmeur.getId()) {
+                            String option = p.getId() + " - " + p.getNom() + " " + p.getPrenom();
+                            champResponsable.addItem(option);
+                            // Sélectionner le responsable actuel si correspond
+                            if (p.getId() == programmeur.getResponsable()) {
+                                champResponsable.setSelectedItem(option);
+                            }
+                        }
+                    }
+
+                    // Ajout des labels et champs au panneau
                     panneau.add(new JLabel("Nom :"));
                     panneau.add(champNom);
                     panneau.add(new JLabel("Prénom :"));
@@ -189,41 +283,72 @@ public class MainUI extends JFrame {
                     panneau.add(champAdresse);
                     panneau.add(new JLabel("Pseudo :"));
                     panneau.add(champPseudo);
+                    panneau.add(new JLabel("Responsable :"));
+                    panneau.add(champResponsable);
+                    panneau.add(new JLabel("Hobby :"));
+                    panneau.add(champHobby);
+                    panneau.add(new JLabel("Année de Naissance :"));
+                    panneau.add(champAnneeNaissance);
                     panneau.add(new JLabel("Salaire :"));
                     panneau.add(champSalaire);
+                    panneau.add(new JLabel("Prime :"));
+                    panneau.add(champPrime);
 
-                    int resultat = JOptionPane.showConfirmDialog(this, panneau, "Modifier Programmeur", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+                    // Afficher la boîte de dialogue pour modifier le programmeur
+                    int resultat = JOptionPane.showConfirmDialog(this, panneau, "Modifier un Programmeur", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
                     if (resultat == JOptionPane.OK_OPTION) {
-                        if (champNom.getText().isEmpty() || champPrenom.getText().isEmpty() ||
-                                champAdresse.getText().isEmpty() || champPseudo.getText().isEmpty() ||
-                                champSalaire.getText().isEmpty()) {
-                            JOptionPane.showMessageDialog(this, "Tous les champs sont requis !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                        // Vérification des champs obligatoires
+                        if (champNom.getText().isEmpty() || champPrenom.getText().isEmpty() || champAdresse.getText().isEmpty() ||
+                                champPseudo.getText().isEmpty() || champHobby.getText().isEmpty() ||
+                                champAnneeNaissance.getText().isEmpty() || champSalaire.getText().isEmpty()) {
+                            JOptionPane.showMessageDialog(this, "Tous les champs obligatoires doivent être remplis !", "Erreur", JOptionPane.ERROR_MESSAGE);
                             return;
                         }
 
                         try {
-                            int salaire = Integer.parseInt(champSalaire.getText());
+                            // Mise à jour des attributs du programmeur
+                            programmeur.setNom(champNom.getText());
+                            programmeur.setPrenom(champPrenom.getText());
+                            programmeur.setAdresse(champAdresse.getText());
+                            programmeur.setPseudo(champPseudo.getText());
 
-                            p.setNom(champNom.getText());
-                            p.setPrenom(champPrenom.getText());
-                            p.setAdresse(champAdresse.getText());
-                            p.setPseudo(champPseudo.getText());
-                            p.setSalaire(salaire);
+                            // Gestion du responsable (extrait l'ID du JComboBox)
+                            String responsableSelection = (String) champResponsable.getSelectedItem();
+                            if (responsableSelection != null && !responsableSelection.equals("Aucun")) {
+                                String[] splitResponsable = responsableSelection.split(" - ");
+                                programmeur.setResponsable(Integer.parseInt(splitResponsable[0])); // ID du responsable
+                            } else {
+                                programmeur.setResponsable(0); // Aucun responsable
+                            }
 
-                            serviceProgrammeur.update(p);
+                            // Champs obligatoires et optionnels
+                            programmeur.setHobby(champHobby.getText());
+                            programmeur.setAnNaissance(Integer.parseInt(champAnneeNaissance.getText()));
+                            programmeur.setSalaire(Integer.parseInt(champSalaire.getText()));
+                            programmeur.setPrime(champPrime.getText().isEmpty() ? 0 : Integer.parseInt(champPrime.getText()));
+
+                            // Mettre à jour le programmeur via le service
+                            serviceProgrammeur.update(programmeur);
+
+                            // Enregistrer l'action dans l'historique
+                            String dateCourante = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+                            Action action = new Action(
+                                    "Modification du programmeur (ID=" + programmeur.getId() + ")",
+                                    dateCourante,
+                                    programmeur
+                            );
+                            historique.ajouterAction(action);
+
+                            // Notifications et mise à jour de l'interface
                             JOptionPane.showMessageDialog(this, "Programmeur modifié avec succès !");
                             rafraichirListeProgrammeurs();
                             rafraichirHistorique();
                         } catch (NumberFormatException e) {
-                            JOptionPane.showMessageDialog(this, "Le salaire doit être un nombre valide !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                            JOptionPane.showMessageDialog(this, "Les champs Année de Naissance et Salaire doivent être des nombres valides !", "Erreur", JOptionPane.ERROR_MESSAGE);
                         }
                     }
-                } else {
-                    JOptionPane.showMessageDialog(this, "Programmeur introuvable !", "Erreur", JOptionPane.ERROR_MESSAGE);
                 }
-            } catch (NumberFormatException e) {
-                JOptionPane.showMessageDialog(this, "L'ID doit être un nombre valide !", "Erreur", JOptionPane.ERROR_MESSAGE);
             }
         }
     }
@@ -255,6 +380,65 @@ public class MainUI extends JFrame {
             }
         }
     }
+
+    private void afficherInformationsProgrammeur() {
+        JPanel panneauSelection = new JPanel(new BorderLayout());
+        JComboBox<String> listeProgrammeurs = new JComboBox<>();
+
+        // Charger les programmeurs dans le menu déroulant
+        List<Programmeur> programmeurs = serviceProgrammeur.findAll();
+        for (Programmeur p : programmeurs) {
+            listeProgrammeurs.addItem(p.getId() + " - " + p.getNom() + " " + p.getPrenom());
+        }
+
+        panneauSelection.add(new JLabel("Choisissez un programmeur :"), BorderLayout.NORTH);
+        panneauSelection.add(listeProgrammeurs, BorderLayout.CENTER);
+
+        // Afficher la boîte de dialogue pour choisir un programmeur
+        int resultatSelection = JOptionPane.showConfirmDialog(this, panneauSelection, "Voir les Informations", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+        if (resultatSelection == JOptionPane.OK_OPTION) {
+            String programmeurSelectionne = (String) listeProgrammeurs.getSelectedItem();
+
+            if (programmeurSelectionne != null) {
+                String[] split = programmeurSelectionne.split(" - ");
+                int id = Integer.parseInt(split[0]);
+
+                Programmeur programmeur = serviceProgrammeur.findOne(id);
+
+                if (programmeur != null) {
+                    // Créer un panneau avec les informations en texte non modifiable
+                    JPanel panneauDetails = new JPanel(new GridLayout(0, 2));
+                    panneauDetails.add(new JLabel("ID :"));
+                    panneauDetails.add(new JLabel(String.valueOf(programmeur.getId())));
+                    panneauDetails.add(new JLabel("Nom :"));
+                    panneauDetails.add(new JLabel(programmeur.getNom()));
+                    panneauDetails.add(new JLabel("Prénom :"));
+                    panneauDetails.add(new JLabel(programmeur.getPrenom()));
+                    panneauDetails.add(new JLabel("Adresse :"));
+                    panneauDetails.add(new JLabel(programmeur.getAdresse()));
+                    panneauDetails.add(new JLabel("Pseudo :"));
+                    panneauDetails.add(new JLabel(programmeur.getPseudo()));
+                    panneauDetails.add(new JLabel("Responsable (ID) :"));
+                    panneauDetails.add(new JLabel(programmeur.getResponsable() == 0 ? "Aucun" : String.valueOf(programmeur.getResponsable())));
+                    panneauDetails.add(new JLabel("Hobby :"));
+                    panneauDetails.add(new JLabel(programmeur.getHobby()));
+                    panneauDetails.add(new JLabel("Année de Naissance :     "));
+                    panneauDetails.add(new JLabel(String.valueOf(programmeur.getAnNaissance())));
+                    panneauDetails.add(new JLabel("Salaire :"));
+                    panneauDetails.add(new JLabel(String.valueOf(programmeur.getSalaire())));
+                    panneauDetails.add(new JLabel("Prime :"));
+                    panneauDetails.add(new JLabel(String.valueOf(programmeur.getPrime())));
+
+                    // Afficher les informations dans une boîte de dialogue
+                    JOptionPane.showMessageDialog(this, panneauDetails, "Informations du Programmeur", JOptionPane.PLAIN_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Programmeur introuvable !", "Erreur", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
+    }
+
 
     private void rafraichirListeProgrammeurs() {
         getContentPane().removeAll();

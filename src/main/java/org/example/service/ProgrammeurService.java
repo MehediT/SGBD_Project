@@ -40,7 +40,7 @@ public class ProgrammeurService implements IProgrammeurService {
                         rs.getString("prenom"),
                         rs.getString("adresse"),
                         rs.getString("pseudo"),
-                        rs.getString("responsable"),
+                        rs.getInt("responsable"),
                         rs.getString("hobby"),
                         rs.getInt("annNaissance"),
                         rs.getInt("salaire"),
@@ -78,7 +78,7 @@ public class ProgrammeurService implements IProgrammeurService {
                         rs.getString("prenom"),
                         rs.getString("adresse"),
                         rs.getString("pseudo"),
-                        rs.getString("responsable"),
+                        rs.getInt("responsable"),
                         rs.getString("hobby"),
                         rs.getInt("annNaissance"),
                         rs.getInt("salaire"),
@@ -115,7 +115,7 @@ public class ProgrammeurService implements IProgrammeurService {
                         rs.getString("prenom"),
                         rs.getString("adresse"),
                         rs.getString("pseudo"),
-                        rs.getString("responsable"),
+                        rs.getInt("responsable"),
                         rs.getString("hobby"),
                         rs.getInt("annNaissance"),
                         rs.getInt("salaire"),
@@ -138,7 +138,7 @@ public class ProgrammeurService implements IProgrammeurService {
             stmt.setString(2, programmeur.getPrenom());
             stmt.setString(3, programmeur.getAdresse());
             stmt.setString(4, programmeur.getPseudo());
-            stmt.setString(5, programmeur.getResponsable());
+            stmt.setInt(5, programmeur.getResponsable());
             stmt.setString(6, programmeur.getHobby());
             stmt.setInt(7, programmeur.getAnNaissance());
             stmt.setInt(8, programmeur.getSalaire());
@@ -177,7 +177,7 @@ public class ProgrammeurService implements IProgrammeurService {
             pstmt.setString(2, updatedProgrammeur.getPrenom());
             pstmt.setString(3, updatedProgrammeur.getAdresse());
             pstmt.setString(4, updatedProgrammeur.getPseudo());
-            pstmt.setString(5, updatedProgrammeur.getResponsable());
+            pstmt.setInt(5, updatedProgrammeur.getResponsable());
             pstmt.setString(6, updatedProgrammeur.getHobby());
             pstmt.setInt(7, updatedProgrammeur.getAnNaissance());
             pstmt.setInt(8, updatedProgrammeur.getSalaire());
@@ -228,7 +228,7 @@ public class ProgrammeurService implements IProgrammeurService {
         stmt.setString(3, updatedProgrammeur.getPrenom());
         stmt.setString(4, updatedProgrammeur.getAdresse());
         stmt.setString(5, updatedProgrammeur.getPseudo());
-        stmt.setString(6, updatedProgrammeur.getResponsable());
+        stmt.setInt(6, updatedProgrammeur.getResponsable());
         stmt.setString(7, updatedProgrammeur.getHobby());
         stmt.setInt(8, updatedProgrammeur.getAnNaissance());
         stmt.setInt(9, updatedProgrammeur.getSalaire());
