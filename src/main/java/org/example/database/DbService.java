@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.database;
 
 import org.example.exception.SQLConnectionException;
 
@@ -10,7 +10,13 @@ import java.sql.SQLException;
  * Service de gestion de la connexion à la base de données PostgreSQL.
  * <p>
  * Cette classe gère l'établissement et la fermeture de la connexion à une base de données PostgreSQL spécifique.
+ * Declaré en tant que classe statique, elle ne peut pas être instanciée et ses méthodes sont accessibles
+ * Elle est Déclarez en global & initialisez en local au besoin
  * </p>
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
 public class DbService {
 
@@ -18,7 +24,7 @@ public class DbService {
      * URL de connexion à la base de données PostgreSQL.
      * Remplacez l'URL par celle de votre base de données si nécessaire.
      */
-    private static final String URL = "jdbc:postgresql://localhost:5432/sgbdproject";
+    private static final String URL = "jdbc:postgresql://localhost:5432/prog_bd";
 
     /**
      * Instance de la connexion à la base de données.

@@ -6,6 +6,10 @@ package org.example.exception;
  * Cette exception est déclenchée lorsqu'une tentative d'ajout de données dans une base SQL échoue.
  * Elle permet de transmettre un message d'erreur détaillé à l'utilisateur ou au développeur.
  * </p>
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
 public class SQLFailAdd extends RuntimeException {
 

@@ -1,7 +1,8 @@
-package org.example.service;
+package org.example.database;
 
 import org.example.exception.*;
 import org.example.model.Programmeur;
+import org.example.run.Query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,10 +14,14 @@ import java.util.List;
 
 /**
  * Service permettant d'interagir avec la base de données pour effectuer des opérations CRUD sur les programmeurs.
- * Cette classe implémente l'interface {@link IProgrammeurService} et fournit des méthodes pour ajouter, mettre à jour,
+ * Cette classe implémente l'interface {@link ActionsBDD} et fournit des méthodes pour ajouter, mettre à jour,
  * supprimer et récupérer des programmeurs dans la base de données.
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
-public class ProgrammeurService implements IProgrammeurService {
+public class ActionsBDDImpl implements ActionsBDD {
 
     /**
      * Récupère tous les programmeurs présents dans la base de données.
@@ -28,7 +33,7 @@ public class ProgrammeurService implements IProgrammeurService {
     @Override
     public List<Programmeur> findAll() throws SQLFailQuery, SQLConnectionException {
         List<Programmeur> programmeurs = new ArrayList<>();
-        String sql = "SELECT * FROM programmeur";
+        String sql = Query.selectAllProgrammers;
         try (Connection conn = DbService.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
@@ -66,7 +71,7 @@ public class ProgrammeurService implements IProgrammeurService {
      */
     @Override
     public Programmeur findOne(int id) throws SQLFailQuery, SQLConnectionException {
-        String sql = "SELECT * FROM programmeur WHERE id = ?";
+        String sql = Query.selectProgrammerById;
         try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, id);
 
@@ -104,7 +109,7 @@ public class ProgrammeurService implements IProgrammeurService {
      */
     @Override
     public Programmeur findByPseudo(String pseudo) throws SQLFailQuery, SQLConnectionException {
-        String sql = "SELECT * FROM programmeur WHERE pseudo = ? LIMIT 1";
+        String sql = Query.selectProgrammerByPseudo ;
         try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, pseudo);
             ResultSet rs = stmt.executeQuery();
@@ -130,9 +135,16 @@ public class ProgrammeurService implements IProgrammeurService {
         return null;
     }
 
+    /**
+     * Ajoute un nouveau programmeur à la base de données.
+     *
+     * @param programmeur Le programmeur à ajouter.
+     * @throws SQLFailAdd En cas d'erreur lors de l'ajout du programmeur.
+     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
+     */
     @Override
     public boolean add(Programmeur programmeur) throws SQLFailAdd, SQLConnectionException {
-        String sql = "INSERT INTO programmeur (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        String sql = Query.insertProgrammer;
         try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, programmeur.getNom());
             stmt.setString(2, programmeur.getPrenom());
@@ -152,26 +164,16 @@ public class ProgrammeurService implements IProgrammeurService {
         return true;
     }
 
-
-    /**
-     * Ajoute un nouveau programmeur à la base de données.
-     *
-     * @param p Le programmeur à ajouter.
-     * @throws SQLFailAdd En cas d'erreur lors de l'ajout du programmeur.
-     * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
-     */
-
-
     /**
      * Met à jour un programmeur existant dans la base de données.
      *
      * @param updatedProgrammeur Le programmeur avec les nouvelles données à mettre à jour.
-     * @throws SQLFailUpdate En cas d'erreur lors de la mise à jour du programmeur.
+     * @throws SQLFailUpdate          En cas d'erreur lors de la mise à jour du programmeur.
      * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
      */
     @Override
-    public boolean update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException {
-        String sql = "UPDATE programmeur SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
+    public void update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException {
+        String sql = Query.updateProgrammer;
         try (Connection conn = DbService.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, updatedProgrammeur.getNom());
             pstmt.setString(2, updatedProgrammeur.getPrenom());
@@ -190,19 +192,18 @@ public class ProgrammeurService implements IProgrammeurService {
         } finally {
             DbService.closeConnection();
         }
-        return true;
     }
 
     /**
      * Supprime un programmeur de la base de données.
      *
      * @param p Le programmeur à supprimé.
-     * @throws SQLFailDelete En cas d'erreur lors de la suppression du programmeur.
+     * @throws SQLFailDelete          En cas d'erreur lors de la suppression du programmeur.
      * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
      */
     @Override
-    public boolean delete(Programmeur p) throws SQLFailDelete, SQLConnectionException {
-        String sql = "DELETE FROM programmeur WHERE id = ?";
+    public void delete(Programmeur p) throws SQLFailDelete, SQLConnectionException {
+        String sql = Query.deleteProgrammer;
         try (Connection conn = DbService.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, p.getId());
@@ -212,7 +213,6 @@ public class ProgrammeurService implements IProgrammeurService {
         } finally {
             DbService.closeConnection();
         }
-        return true;
     }
 
     /**

@@ -1,4 +1,4 @@
-package org.example.service;
+package org.example.database;
 
 import org.example.exception.*;
 import org.example.model.Programmeur;
@@ -12,8 +12,11 @@ import java.util.List;
  * sur les objets {@link Programmeur} dans la base de données.
  * Les méthodes peuvent lever des exceptions spécifiques liées aux échecs d'opérations SQL.
  * </p>
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
-public interface IProgrammeurService {
+public interface ActionsBDD {
 
     /**
      * Récupère tous les programmeurs dans la base de données.
@@ -57,19 +60,19 @@ public interface IProgrammeurService {
      * Met à jour les informations d'un programmeur dans la base de données.
      *
      * @param updatedProgrammeur L'objet Programmeur avec les nouvelles informations.
-     * @throws SQLFailUpdate En cas d'échec lors de la mise à jour du programmeur.
+     * @throws SQLFailUpdate          En cas d'échec lors de la mise à jour du programmeur.
      * @throws SQLConnectionException En cas de problème avec la connexion à la base de données.
      */
-    boolean update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException;
+    void update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException;
 
     /**
      * Supprime un programmeur de la base de données.
      *
      * @param p L'objet Programmeur à supprimer.
-     * @throws SQLFailDelete En cas d'échec lors de la suppression du programmeur.
+     * @throws SQLFailDelete          En cas d'échec lors de la suppression du programmeur.
      * @throws SQLConnectionException En cas de problème avec la connexion à la base de données.
      */
-    boolean delete(Programmeur p) throws SQLFailDelete, SQLConnectionException;
+    void delete(Programmeur p) throws SQLFailDelete, SQLConnectionException;
 
 
 

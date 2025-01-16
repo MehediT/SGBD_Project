@@ -7,6 +7,10 @@ package org.example.exception;
  * de mise à jour ou d'autres types d'opérations. Elle permet de transmettre un message d'erreur détaillé
  * sur la cause de l'échec.
  * </p>
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
 public class SQLFailQuery extends RuntimeException {
 

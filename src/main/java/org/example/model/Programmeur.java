@@ -7,6 +7,10 @@ package org.example.model;
  * Elle contient des informations telles que l'identifiant, le nom, le prénom,
  * l'adresse, le pseudo, le responsable, les hobbies, l'année de naissance,
  * le salaire et la prime.
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
 public class Programmeur {
 
@@ -193,7 +197,7 @@ public class Programmeur {
     /**
      * Définit le responsable du programmeur.
      *
-     * @param responsable Le responsable à définir
+     * @param responsable Id responsable à définir
      */
     public void setResponsable(int responsable) {
         this.responsable = responsable;

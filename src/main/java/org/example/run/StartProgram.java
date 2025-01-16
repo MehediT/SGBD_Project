@@ -4,35 +4,134 @@ import org.example.exception.SQLConnectionException;
 import org.example.exception.SQLFailAdd;
 import org.example.exception.SQLFailDelete;
 import org.example.exception.SQLFailQuery;
-import org.example.service.IProgrammeurService;
+import org.example.database.ActionsBDD;
 
 import java.util.Scanner;
 
+/**
+ * La classe abstraite <code>StartProgram</code> gère l'exécution d'un menu interactif
+ * permettant à l'utilisateur d'effectuer diverses opérations liées aux programmeurs
+ * (affichage, ajout, suppression, mise à jour, etc.).
+ *
+ * <p>Elle définit des méthodes communes pour l'interaction utilisateur (lecture d'entrées,
+ * affichage du menu, etc.) et déclare des méthodes abstraites pour les opérations
+ * spécifiques à implémenter dans les classes concrètes héritant de <code>StartProgram</code>.</p>
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
+ */
 public abstract class StartProgram {
 
-    protected final IProgrammeurService programmeurService;
-    protected final Scanner scanner;
+    /**
+     * Service permettant d'effectuer des actions (CRUD) sur les programmeurs
+     * dans la base de données.
+     */
+    protected final ActionsBDD programmeurService;
+
+    /**
+     * Menu interactif permettant à l'utilisateur de choisir une action à effectuer.
+     */
+    protected final Menu menu;
 
     /**
      * Constructeur alternatif permettant de fournir un scanner personnalisé.
      *
-     * @param programmeurService Le service permettant d'effectuer des actions sur les programmeurs dans la base de données.
-     * @param scanner    Le scanner à utiliser pour obtenir des entrées utilisateur.
+     * @param programmeurService Le service permettant d'effectuer des actions
+     *                           sur les programmeurs dans la base de données.
+     * @param scanner            Le scanner à utiliser pour obtenir des entrées utilisateur.
      */
-    public StartProgram(IProgrammeurService programmeurService, Scanner scanner) {
+    public StartProgram(ActionsBDD programmeurService, Scanner scanner, boolean isTest) {
         this.programmeurService = programmeurService;
-        this.scanner = scanner;
+        this.menu = new Menu(scanner, isTest);
     }
 
     /**
+     * Supprime un programmeur (par exemple en demandant l'ID ou le pseudo à l'utilisateur).
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void removeProgrammer();
+
+    /**
+     * Affiche en détail un programmeur particulier (sélectionné par l'utilisateur).
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void showProgrammer();
+
+    /**
+     * Ajoute un nouveau programmeur en demandant ses informations
+     * (nom, prénom, salaire, etc.) à l'utilisateur.
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void addProgrammer();
+
+    /**
+     * Met à jour le salaire d'un programmeur, par exemple après
+     * une promotion ou un ajustement.
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void updateSalaire();
+
+    /**
+     * Met à jour les informations d'un programmeur (nom, prénom, adresse, etc.).
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void updateProgrammer();
+
+    /**
+     * Affiche la liste de tous les programmeurs disponibles
+     * (peut inclure ID, nom, prénom, etc.).
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void showProgrammers();
+
+    /**
+     * Cherche un programmeur dans la base à partir de son pseudo.
+     * <p>
+     * L'implémentation doit être fournie par les classes filles.
+     * </p>
+     */
+    protected abstract void findByPseudo();
+
+    /**
      * Méthode principale qui gère l'exécution du menu interactif.
-     * Elle affiche le menu, prend les entrées de l'utilisateur et effectue les actions appropriées.
+     * <ul>
+     *     <li>Affiche le menu principal.</li>
+     *     <li>Lit et interprète le choix de l'utilisateur.</li>
+     *     <li>Appelle la méthode appropriée selon le choix.</li>
+     *     <li>Gère les exceptions liées aux opérations SQL (ajout, suppression, requête, etc.).</li>
+     * </ul>
+     *
+     * <p>Continue à se répéter jusqu'à ce que l'utilisateur choisisse de quitter
+     * (c'est-à-dire lorsque le choix vaut <code>6</code>).</p>
      */
     public void run() {
         int choix;
+
+        try {
+            programmeurService.findAll();
+        } catch (Exception e) {
+            System.err.println("Le programme ne peut pas continuer sans connexion à la base de données.");
+            System.err.println(e.getMessage());
+            System.err.println("Programme annulé.");
+            System.exit(-1);
+        }
+
         do {
-            afficherMenu();
-            choix = getInputInt("Entrez votre choix : ");
+            Menu.afficherMenu();
+            choix = menu.getInputInt("Entrez votre choix : ");
             try {
                 switch (choix) {
                     case 1:
@@ -69,83 +168,5 @@ public abstract class StartProgram {
             }
         } while (choix != 6);
     }
-
-    protected abstract void findByPseudo();
-
-    protected abstract void removeProgrammer();
-
-    protected abstract void showProgrammer();
-
-    protected abstract void addProgrammer();
-
-    protected abstract void updateSalaire();
-
-    protected abstract void updateProgrammer();
-
-    protected abstract void showProgrammers();
-
-    /**
-     * Méthode utilitaire pour obtenir un entier à partir de l'entrée de l'utilisateur.
-     *
-     * @param message Le message à afficher avant de demander l'entrée utilisateur.
-     * @return L'entier saisi par l'utilisateur.
-     */
-    public int getInputInt(String message) {
-        System.out.println(message);
-        while (!scanner.hasNextInt()) {
-            System.out.println("Veuillez entrer un nombre.");
-            scanner.next();
-        }
-        int input = scanner.nextInt();
-        scanner.nextLine() ; // Pour consommer le retour à la ligne
-        return input;
-    }
-
-    /**
-     * Méthode utilitaire pour obtenir une chaîne de caractères à partir de l'entrée de l'utilisateur.
-     *
-     * @param message Le message à afficher avant de demander l'entrée utilisateur.
-     * @return La chaîne de caractères saisie par l'utilisateur.
-     */
-    public String getInputString(String message) {
-        System.out.println(message);
-        String input = scanner.nextLine();
-        while (input.trim().isEmpty()) {
-            System.out.println("L'entrée ne peut pas être vide. Veuillez réessayer.");
-            input = scanner.nextLine();
-        }
-        return input;
-    }
-
-    /**
-     * Affiche le menu principal avec les options disponibles.
-     */
-    public static void afficherMenu() {
-        System.out.println("<<<<<<<<<< Menu >>>>>>>>>>");
-        System.out.println("1. Afficher la liste des programmeurs\n");
-        System.out.println("2. Afficher un programmeur\n");
-        System.out.println("3. Supprimer un programmeur\n");
-        System.out.println("4. Ajouter un programmeur\n");
-        System.out.println("5. Modifier le salaire\n");
-        System.out.println("6. Quitter le programme\n");
-
-        System.out.println("Bonus");
-        System.out.println("7. Afficher un programmeur via son pseudo");
-        System.out.println("8. Modifier un programmeur");
-    }
-
-    public void afficherSousMenuModification() {
-        System.out.println("\n<<<<<<<<<< Sous-menu Modification >>>>>>>>>>");
-        System.out.println("1. Modifier le nom");
-        System.out.println("2. Modifier le prénom");
-        System.out.println("3. Modifier l'adresse");
-        System.out.println("4. Modifier le pseudo");
-        System.out.println("5. Modifier le responsable");
-        System.out.println("6. Modifier le hobby");
-        System.out.println("7. Modifier l'année de naissance");
-        System.out.println("8. Modifier le salaire");
-        System.out.println("9. Modifier la prime");
-        System.out.println("10. Retour au menu principal");
-    }
-
 }
+

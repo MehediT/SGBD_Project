@@ -6,6 +6,10 @@ package org.example.exception;
  * Cette exception est déclenchée lorsqu'une erreur survient lors de l'établissement
  * d'une connexion SQL, afin de fournir un message d'erreur détaillé.
  * </p>
+ *
+ * @author Mehedi Touré & Adil Chetouni
+ * @version 1.0
+ * @since   1.0
  */
 public class SQLConnectionException extends RuntimeException {
 
