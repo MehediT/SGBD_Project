@@ -51,7 +51,7 @@ public interface IProgrammeurService {
      * @throws SQLFailAdd En cas d'échec lors de l'ajout du programmeur.
      * @throws SQLConnectionException En cas de problème avec la connexion à la base de données.
      */
-    void add(Programmeur programmeur) throws SQLFailAdd, SQLConnectionException;
+    boolean add(Programmeur programmeur) throws SQLFailAdd, SQLConnectionException;
 
     /**
      * Met à jour les informations d'un programmeur dans la base de données.
@@ -60,7 +60,7 @@ public interface IProgrammeurService {
      * @throws SQLFailUpdate En cas d'échec lors de la mise à jour du programmeur.
      * @throws SQLConnectionException En cas de problème avec la connexion à la base de données.
      */
-    void update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException;
+    boolean update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException;
 
     /**
      * Supprime un programmeur de la base de données.
@@ -69,7 +69,7 @@ public interface IProgrammeurService {
      * @throws SQLFailDelete En cas d'échec lors de la suppression du programmeur.
      * @throws SQLConnectionException En cas de problème avec la connexion à la base de données.
      */
-    void delete(Programmeur p) throws SQLFailDelete, SQLConnectionException;
+    boolean delete(Programmeur p) throws SQLFailDelete, SQLConnectionException;
 
 
 

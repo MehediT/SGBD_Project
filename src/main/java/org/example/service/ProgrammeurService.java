@@ -140,7 +140,7 @@ public class ProgrammeurService implements IProgrammeurService {
      * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
      */
     @Override
-    public void add(Programmeur p) throws SQLFailAdd, SQLConnectionException {
+    public boolean add(Programmeur p) throws SQLFailAdd, SQLConnectionException {
         String sql = "INSERT INTO programmeur (nom, prenom, adresse, pseudo, responsable, hobby, annNaissance, salaire, prime) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DbService.getConnection(); PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, p.getNom());
@@ -158,6 +158,7 @@ public class ProgrammeurService implements IProgrammeurService {
         } finally {
             DbService.closeConnection();
         }
+        return true;
     }
 
     /**
@@ -168,7 +169,7 @@ public class ProgrammeurService implements IProgrammeurService {
      * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
      */
     @Override
-    public void update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException {
+    public boolean update(Programmeur updatedProgrammeur) throws SQLFailUpdate, SQLConnectionException {
         String sql = "UPDATE programmeur SET nom = ?, prenom = ?, adresse = ?, pseudo = ?, responsable = ?, hobby = ?, annNaissance = ?, salaire = ?, prime = ? WHERE id = ?";
         try (Connection conn = DbService.getConnection(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, updatedProgrammeur.getNom());
@@ -188,6 +189,7 @@ public class ProgrammeurService implements IProgrammeurService {
         } finally {
             DbService.closeConnection();
         }
+        return true;
     }
 
     /**
@@ -198,7 +200,7 @@ public class ProgrammeurService implements IProgrammeurService {
      * @throws SQLConnectionException En cas d'erreur avec la connexion à la base de données.
      */
     @Override
-    public void delete(Programmeur p) throws SQLFailDelete, SQLConnectionException {
+    public boolean delete(Programmeur p) throws SQLFailDelete, SQLConnectionException {
         String sql = "DELETE FROM programmeur WHERE id = ?";
         try (Connection conn = DbService.getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -209,6 +211,7 @@ public class ProgrammeurService implements IProgrammeurService {
         } finally {
             DbService.closeConnection();
         }
+        return true;
     }
 
     /**
