@@ -39,10 +39,10 @@ public class Programmeur {
     private int anNaissance;
 
     /** Salaire du programmeur */
-    private int salaire;
+    private float salaire;
 
     /** Prime associée au programmeur */
-    private int prime;
+    private float prime;
 
     /**
      * Constructeur avec tous les paramètres.
@@ -58,7 +58,7 @@ public class Programmeur {
      * @param salaire     Salaire du programmeur
      * @param prime       Prime associée
      */
-    public Programmeur(int id, String nom, String prenom, String adresse, String pseudo, int responsable, String hobby, int annNaissance, int salaire, int prime) {
+    public Programmeur(int id, String nom, String prenom, String adresse, String pseudo, int responsable, String hobby, int annNaissance, float salaire, float prime) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
@@ -244,7 +244,7 @@ public class Programmeur {
      *
      * @return Le salaire
      */
-    public int getSalaire() {
+    public float getSalaire() {
         return salaire;
     }
 
@@ -253,7 +253,7 @@ public class Programmeur {
      *
      * @param salaire Le salaire à définir
      */
-    public void setSalaire(int salaire) {
+    public void setSalaire(float salaire) {
         this.salaire = salaire;
     }
 
@@ -262,7 +262,7 @@ public class Programmeur {
      *
      * @return La prime
      */
-    public int getPrime() {
+    public float getPrime() {
         return prime;
     }
 
@@ -271,7 +271,7 @@ public class Programmeur {
      *
      * @param prime La prime à définir
      */
-    public void setPrime(int prime) {
+    public void setPrime(float prime) {
         this.prime = prime;
     }
 

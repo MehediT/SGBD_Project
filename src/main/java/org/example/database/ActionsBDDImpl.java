@@ -153,8 +153,8 @@ public class ActionsBDDImpl implements ActionsBDD {
             stmt.setInt(5, programmeur.getResponsable());
             stmt.setString(6, programmeur.getHobby());
             stmt.setInt(7, programmeur.getAnNaissance());
-            stmt.setInt(8, programmeur.getSalaire());
-            stmt.setInt(9, programmeur.getPrime());
+            stmt.setFloat(8, programmeur.getSalaire());
+            stmt.setFloat(9, programmeur.getPrime());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new SQLFailAdd("Erreur lors de l'ajout du programmeur : " + e.getMessage());
@@ -182,8 +182,8 @@ public class ActionsBDDImpl implements ActionsBDD {
             pstmt.setInt(5, updatedProgrammeur.getResponsable());
             pstmt.setString(6, updatedProgrammeur.getHobby());
             pstmt.setInt(7, updatedProgrammeur.getAnNaissance());
-            pstmt.setInt(8, updatedProgrammeur.getSalaire());
-            pstmt.setInt(9, updatedProgrammeur.getPrime());
+            pstmt.setFloat(8, updatedProgrammeur.getSalaire());
+            pstmt.setFloat(9, updatedProgrammeur.getPrime());
             pstmt.setInt(10, updatedProgrammeur.getId());
 
             pstmt.executeUpdate();
@@ -213,25 +213,5 @@ public class ActionsBDDImpl implements ActionsBDD {
         } finally {
             DbService.closeConnection();
         }
-    }
-
-    /**
-     * Remplie un {@link PreparedStatement} avec les informations d'un programmeur pour une mise à jour.
-     *
-     * @param updatedProgrammeur Le programmeur avec les nouvelles données.
-     * @param stmt Le {@link PreparedStatement} à remplir.
-     * @throws SQLException Si une erreur se produit lors du remplissage du statement.
-     */
-    private void setStringStatement(Programmeur updatedProgrammeur, PreparedStatement stmt) throws SQLException {
-        stmt.setInt(1, updatedProgrammeur.getId());
-        stmt.setString(2, updatedProgrammeur.getNom());
-        stmt.setString(3, updatedProgrammeur.getPrenom());
-        stmt.setString(4, updatedProgrammeur.getAdresse());
-        stmt.setString(5, updatedProgrammeur.getPseudo());
-        stmt.setInt(6, updatedProgrammeur.getResponsable());
-        stmt.setString(7, updatedProgrammeur.getHobby());
-        stmt.setInt(8, updatedProgrammeur.getAnNaissance());
-        stmt.setInt(9, updatedProgrammeur.getSalaire());
-        stmt.setInt(10, updatedProgrammeur.getPrime());
     }
 }

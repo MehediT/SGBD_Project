@@ -61,7 +61,7 @@ public class StartProjet extends StartProgram {
         if (p == null) {
             System.out.println("Programmeur non trouvé.");
         } else {
-            int salaire = super.menu.getInputInt("Nouveau salaire : ");
+            float salaire = super.menu.getInputFloat("Nouveau salaire : ");
             p.setSalaire(salaire);
             programmeurService.update(p);
 
@@ -133,12 +133,12 @@ public class StartProjet extends StartProgram {
                     isModified = true;
                     break;
                 case 8:
-                    int salaire = super.menu.getInputInt("Nouveau salaire : ");
+                    float salaire = super.menu.getInputFloat("Nouveau salaire : ");
                     p.setSalaire(salaire);
                     isModified = true;
                     break;
                 case 9:
-                    int prime = super.menu.getInputInt("Nouvelle prime : ");
+                    float prime = super.menu.getInputFloat("Nouvelle prime : ");
                     p.setPrime(prime);
                     isModified = true;
                     break;
@@ -212,8 +212,8 @@ public class StartProjet extends StartProgram {
 
         programmeur.setHobby(super.menu.getInputString("Hobby : "));
         programmeur.setAnNaissance(super.menu.getInputInt("Année de naissance : "));
-        programmeur.setSalaire(super.menu.getInputInt("Salaire : "));
-        programmeur.setPrime(super.menu.getInputInt("Prime : "));
+        programmeur.setSalaire(super.menu.getInputFloat("Salaire : "));
+        programmeur.setPrime(super.menu.getInputFloat("Prime : "));
 
         programmeurService.add(programmeur);
 

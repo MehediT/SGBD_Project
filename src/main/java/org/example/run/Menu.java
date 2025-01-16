@@ -73,12 +73,37 @@ public class Menu{
      * @return L'entier saisi par l'utilisateur.
      */
     public int getInputInt(String message) {
-        System.out.println(message);
+        System.out.print(message);
         while (!scanner.hasNextInt()) {
-            System.out.println("Veuillez entrer un nombre.");
+            System.out.print("Veuillez entrer un nombre valide." +message);
             scanner.next();
         }
         int input = scanner.nextInt();
+        scanner.nextLine(); // Pour consommer le retour à la ligne
+        if(isTest) {
+            System.out.print(input+"\n");
+        }
+        return input;
+    }
+
+    /**
+     * Méthode utilitaire pour obtenir un réel à partir de l'entrée de l'utilisateur.
+     * <ul>
+     *     <li>Affiche d'abord un message passé en paramètre.</li>
+     *     <li>Valide que l'entrée est bien un réel.</li>
+     *     <li>Retourne ce réel.</li>
+     * </ul>
+     *
+     * @param message Le message à afficher avant de demander l'entrée utilisateur.
+     * @return Le réel saisi par l'utilisateur.
+     */
+    public float getInputFloat(String message) {
+        System.out.print(message);
+        while (!scanner.hasNextFloat()) {
+            System.out.print("Veuillez entrer un valeur valide." +message);
+            scanner.next();
+        }
+        float input = scanner.nextFloat();
         scanner.nextLine(); // Pour consommer le retour à la ligne
         if(isTest) {
             System.out.print(input+"\n");

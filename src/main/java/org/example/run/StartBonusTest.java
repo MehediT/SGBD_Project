@@ -40,14 +40,14 @@ public class StartBonusTest extends StartProjet {
     public static Scanner initScanner() {
         // Simuler les entrées utilisateur pour tester toutes les fonctionnalités
 
-        String addUser1 = "4\nJohn\nDoe\n16bis-rue-de-Paris\njohndoe\n-1\nManager\nFootball\n1985\n55000\n5000";
-        String addUser2 = "4\nJane\nSmith\n57-avenue-colombe-gorki\njanesmith\n-1\nLead\nReading\n1990\n60000\n7000";
-        String addUser3 = "4\nAlice\nBrown\n14-boulevard-jane-gorki\naliceb\n-1\nSenior\nChess\n1988\n58000\n6000";
+        String addUser1 = "4\nJohn\nDoe\n16bis-rue-de-Paris\njohndoe\n-1\nManager Football\n1985\n99999,99\n50,93";
+        String addUser2 = "4\nJane\nSmith\n57-avenue-colombe-gorki\njanesmith\n-1\nLead Reading\n1990\n60,5000\n700,70";
+        String addUser3 = "4\nAlice\nBrown\n14-boulevard-jane-gorki\naliceb\n-1\nSenior Chess\n1988\n580,40\n600,4";
 
         String show = "1";
         String removeId1 = "3\n1";
         String showProgrammer2 = "2\n2";
-        String updateSalaire = "5\n1\n70000";
+        String updateSalaire = "5\n1\n70000.0";
         String end = "6";
 
         String simulatedInput = show + "\n" + addUser1 + "\n" + addUser2 + "\n" + addUser3 + "\n" + show + "\n" + removeId1 + "\n" + show + "\n" + showProgrammer2 + "\n" + updateSalaire + "\n" + show + "\n" + end + "\n";

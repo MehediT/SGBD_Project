@@ -1,5 +1,6 @@
 package org.example.run;
 
+import org.example.database.ScriptRunner;
 import org.example.exception.SQLConnectionException;
 import org.example.exception.SQLFailAdd;
 import org.example.exception.SQLFailDelete;
@@ -123,10 +124,15 @@ public abstract class StartProgram {
         try {
             programmeurService.findAll();
         } catch (Exception e) {
-            System.err.println("Le programme ne peut pas continuer sans connexion à la base de données.");
+            System.err.println("\nLe programme ne peut pas continuer sans connexion à la base de données.");
             System.err.println(e.getMessage());
-            System.err.println("Programme annulé.");
-            System.exit(-1);
+            System.err.println("Essaie de creation de table...");
+            boolean result = ScriptRunner.SetupDb();
+            if (!result) {
+                System.err.println("Impossible de créer la table.");
+                System.err.println("Programme annulé.");
+                System.exit(-1);
+            }
         }
 
         do {
