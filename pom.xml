@@ -25,27 +25,5 @@
             <version>RELEASE</version>
             <scope>test</scope>
         </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-controls</artifactId>
-            <version>17.0.8</version> <!-- Version d'exemple -->
-        </dependency>
-        <dependency>
-            <groupId>org.openjfx</groupId>
-            <artifactId>javafx-fxml</artifactId>
-            <version>17.0.8</version>
-        </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.openjfx</groupId>
-                <artifactId>javafx-maven-plugin</artifactId>
-                <version>0.0.8</version>
-                <configuration>
-                    <mainClass>org.example.run.StartBonusInterface</mainClass>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>

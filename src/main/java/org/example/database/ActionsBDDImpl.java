@@ -2,7 +2,6 @@ package org.example.database;
 
 import org.example.exception.*;
 import org.example.model.Programmeur;
-import org.example.run.Query;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

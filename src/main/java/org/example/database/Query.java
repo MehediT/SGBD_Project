@@ -1,4 +1,4 @@
-package org.example.run;
+package org.example.database;
 
 /**
  * La classe <strong>Query</strong> regroupe l'ensemble des requêtes SQL
