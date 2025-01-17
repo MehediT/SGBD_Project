@@ -27,7 +27,7 @@
 
 ### <b><span style="color:red;"> Information Cruciale ! </span></b>
 Assurez-vous que PostgreSQL est installé et configuré.  
-Créez une base de données si nécessaire :
+Créez une base de données si nécessaire (le cas ou al table existe pas est gére dans le code). :
 ```sql
 CREATE DATABASE prog_bd;
 ```

@@ -26,7 +26,7 @@ Via Maven :
 ------------------------------------------------------------
 Information Cruciale !!!!!!!
     Assurez-vous que PostgreSQL est installé et configuré.
-    Créez une base de données si nécessaire :
+    Créez une base de données si nécessaire (le cas ou al table existe pas est gére dans le code):
         ______________________________
             CREATE DATABASE prog_bd;
         ______________________________
